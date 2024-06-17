@@ -9,14 +9,26 @@ module.exports = {
 				type: Sequelize.UUID,
 				defaultValue: Sequelize.UUIDV4,
 			},
-			name: {
+			user_fname: {
+				allowNull: false,
+				type: Sequelize.STRING,
+			},
+			user_lname: {
+				allowNull: false,
 				type: Sequelize.STRING,
 			},
 			email: {
+				allowNull: false,
 				type: Sequelize.STRING,
 				unique: true,
 			},
 			password: {
+				allowNull: false,
+				type: Sequelize.STRING,
+			},
+			role: {
+				allowNull: false,
+				defaultValue: 'user',
 				type: Sequelize.STRING,
 			},
 			createdAt: {

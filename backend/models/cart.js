@@ -3,17 +3,18 @@ import { DataTypes, UUIDV4 } from "sequelize";
 export default (sequelize) => {
     const Cart = sequelize.define("Cart", {
         cart_id: {
+            allowNull: false,
+            primaryKey: true,
             type: DataTypes.UUID,
             defaultValue: UUIDV4,
-            primaryKey: true,
         },
         user_id: {
+            allowNull: false,
             type: DataTypes.UUID,
             references: {
                 model: "Users",
                 key: "user_id"
             },
-            allowNull: false,
         },
     }, {
         timestamps: true

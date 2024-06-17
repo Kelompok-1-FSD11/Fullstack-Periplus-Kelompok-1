@@ -1,34 +1,35 @@
 import { DataTypes, UUIDV4 } from 'sequelize';
 
 export default (sequelize) => {
-	const CartItem = sequelize.define(
-		'CartItem',
+	const ProductReview = sequelize.define(
+		'productReview',
 		{
-			cart_item_id: {
+			product_review_id: {
 				allowNull: false,
 				primaryKey: true,
 				type: DataTypes.UUID,
 				defaultValue: UUIDV4,
 			},
-			cart_id: {
+			user_id: {
 				allowNull: false,
 				type: DataTypes.UUID,
 				references: {
-					model: 'Carts',
-					key: 'cart_id',
+					model: 'Users',
+					key: 'user_id',
 				},
 			},
 			product_id: {
-                allowNull: false,
+				allowNull: false,
 				type: DataTypes.UUID,
 				references: {
 					model: 'Products',
 					key: 'product_id',
 				},
 			},
-			quantity: {
+			rating: {
 				allowNull: false,
-				type: DataTypes.INTEGER,
+				type: DataTypes.TINYINT,
+				validate: { min: 1, max: 5 },
 			},
 		},
 		{
@@ -36,10 +37,10 @@ export default (sequelize) => {
 		}
 	);
 
-	CartItem.associate = (models) => {
-		CartItem.belongsTo(models.Cart, { foreignKey: 'cart_id' });
-		CartItem.belongsTo(models.Product, { foreignKey: 'product_id' });
+	ProductReview.associate = (models) => {
+		ProductReview.belongsTo(models.Product, { foreignKey: 'product_id' });
+		ProductReview.belongsTo(models.User, { foreignKey: 'user_id' });
 	};
 
-	return CartItem;
+	return ProductReview;
 };

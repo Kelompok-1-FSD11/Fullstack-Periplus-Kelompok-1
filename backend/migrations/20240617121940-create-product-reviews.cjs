@@ -2,8 +2,8 @@
 
 module.exports = {
 	async up(queryInterface, Sequelize) {
-		await queryInterface.createTable('Wishlists', {
-			wishlist_id: {
+		await queryInterface.createTable('ProductReviews', {
+			product_review_id: {
 				allowNull: false,
 				primaryKey: true,
 				type: Sequelize.UUID,
@@ -17,6 +17,19 @@ module.exports = {
 					key: 'user_id',
 				},
 			},
+			product_id: {
+				allowNull: false,
+				type: Sequelize.UUID,
+				references: {
+					model: 'Products',
+					key: 'product_id',
+				},
+			},
+			rating: {
+				allowNull: false,
+				type: Sequelize.INTEGER,
+				validate: { min: 1, max: 5 },
+			},
 			createdAt: {
 				allowNull: false,
 				type: Sequelize.DATE,
@@ -29,6 +42,11 @@ module.exports = {
 	},
 
 	async down(queryInterface, Sequelize) {
-		await queryInterface.dropTable('Wishlists');
+		/**
+		 * Add reverting commands here.
+		 *
+		 * Example:
+		 * await queryInterface.dropTable('users');
+		 */
 	},
 };

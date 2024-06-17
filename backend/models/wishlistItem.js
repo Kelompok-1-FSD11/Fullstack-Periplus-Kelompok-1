@@ -5,25 +5,26 @@ export default (sequelize) => {
 		'WishlistItem',
 		{
 			wishlist_item_id: {
+				allowNull: false,
+				primaryKey: true,
 				type: DataTypes.UUID,
 				defaultValue: UUIDV4,
-				primaryKey: true,
 			},
 			wishlist_id: {
+				allowNull: false,
 				type: DataTypes.UUID,
 				references: {
 					model: 'Wishlists',
 					key: 'wishlist_id',
 				},
-				allowNull: false,
 			},
 			product_id: {
+				allowNull: false,
 				type: DataTypes.UUID,
 				references: {
 					model: 'Products',
 					key: 'product_id',
 				},
-				allowNull: false,
 			},
 		},
 		{

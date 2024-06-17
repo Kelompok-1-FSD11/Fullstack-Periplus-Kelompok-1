@@ -13,7 +13,7 @@ module.exports = {
 				allowNull: false,
 				type: Sequelize.UUID,
 				references: {
-					model: 'Wishlist',
+					model: 'Wishlists',
 					key: 'wishlist_id',
 				},
 			},

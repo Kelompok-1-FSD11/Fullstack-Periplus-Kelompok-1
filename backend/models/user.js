@@ -1,38 +1,52 @@
-import { DataTypes, UUIDV4 } from "sequelize";
+import { DataTypes, UUIDV4 } from 'sequelize';
 
 export default (sequelize) => {
-    const User = sequelize.define("User", {
-        user_id: {
-            type: DataTypes.UUID,
-            defaultValue: UUIDV4,
-            primaryKey: true,
-        },
-        user_fname: {
-            type: DataTypes.STRING,
-            allowNull: false,
-        },
-        user_lname : {
-            type: DataTypes.STRING,
-            allowNull: false,
-        },
-        email: {
-            type: DataTypes.STRING,
-            allowNull: false,
-            unique: true,
-        },
-        password: {
-            type: DataTypes.STRING,
-            allowNull: false,
-        },
-    },{
-        timestamps: true,
-    })
+	const User = sequelize.define(
+		'User',
+		{
+			user_id: {
+				allowNull: false,
+				primaryKey: true,
+				type: DataTypes.UUID,
+				defaultValue: UUIDV4,
+			},
+			user_fname: {
+				allowNull: false,
+				type: DataTypes.STRING,
+			},
+			user_lname: {
+				allowNull: false,
+				type: DataTypes.STRING,
+			},
+			email: {
+				allowNull: false,
+				type: DataTypes.STRING,
+				unique: true,
+			},
+			password: {
+				allowNull: false,
+				type: DataTypes.STRING,
+			},
+			role: {
+				allowNull: false,
+				defaultValue: 'user',
+				type: DataTypes.STRING,
+			},
+		},
+		{
+			timestamps: true,
+		}
+	);
 
-    User.associate = (models) => {
-        User.hasMany(models.Order);
-        User.hasOne(models.Cart);
-        User.hasOne(models.Wishlist)
-    };
+	User.associate = (models) => {
+		User.hasMany(models.Order);
+		User.hasMany(models.ProductReview, {
+			as: 'review',
+			foreignkey: 'user_id',
+		});
+		User.hasOne(models.Cart);
+		User.hasOne(models.Wishlist);
+	};
 
-    return User
-}
+	return User;
+};

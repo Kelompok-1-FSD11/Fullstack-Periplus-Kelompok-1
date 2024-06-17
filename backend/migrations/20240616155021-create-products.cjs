@@ -9,25 +9,37 @@ module.exports = {
 				type: Sequelize.UUID,
 				defaultValue: Sequelize.UUIDV4,
 			},
-			name: {
+			product_name: {
+				allowNull: false,
 				type: Sequelize.STRING,
 			},
-			description: {
+			product_description: {
 				type: Sequelize.TEXT,
 			},
 			price: {
-				type: Sequelize.FLOAT,
+				allowNull: false,
+				type: Sequelize.DECIMAL(10, 2),
 			},
-			stock: {
+			qty_stock: {
 				type: Sequelize.INTEGER,
+				defaultValue: 0,
 			},
-			categoryId: {
+			category_id: {
 				allowNull: false,
 				type: Sequelize.UUID,
 				references: {
 					model: 'Categories',
 					key: 'category_id',
 				},
+			},
+			qty_sold: {
+				allowNull: false,
+				defaultValue: 0,
+				type: Sequelize.INTEGER,
+			},
+			image_path: {
+				allowNull: false,
+				type: Sequelize.STRING,
 			},
 			createdAt: {
 				allowNull: false,

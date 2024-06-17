@@ -3,13 +3,14 @@ import { DataTypes, UUIDV4 } from "sequelize";
 export default (sequelize) => {
     const Category = sequelize.define("Category", {
         category_id: {
+            allowNull: false,
+            primaryKey: true,
             type: DataTypes.UUID,
             defaultValue: UUIDV4,
-            primaryKey: true,
         },
         name: {
-            type: DataTypes.STRING,
             allowNull: false,
+            type: DataTypes.STRING,
             unique: true,
         },
         description: {

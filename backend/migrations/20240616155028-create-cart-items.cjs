@@ -24,18 +24,18 @@ module.exports = {
 					model: 'Products',
 					key: 'product_id',
 				},
-				quantity: {
-					allowNull: false,
-					type: Sequelize.INTEGER,
-				},
-				createdAt: {
-					allowNull: false,
-					type: Sequelize.DATE,
-				},
-				updatedAt: {
-					allowNull: false,
-					type: Sequelize.DATE,
-				},
+			},
+			quantity: {
+				allowNull: false,
+				type: Sequelize.INTEGER,
+			},
+			createdAt: {
+				allowNull: false,
+				type: Sequelize.DATE,
+			},
+			updatedAt: {
+				allowNull: false,
+				type: Sequelize.DATE,
 			},
 		});
 	},
