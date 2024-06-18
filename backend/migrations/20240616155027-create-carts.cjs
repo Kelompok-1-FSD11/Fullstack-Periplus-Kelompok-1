@@ -17,6 +17,18 @@ module.exports = {
 					key: 'user_id',
 				},
 			},
+			product_id: {
+				allowNull: false,
+				type: Sequelize.UUID,
+				references: {
+					model: 'Products',
+					key: 'product_id',
+				},
+			},
+			quantity: {
+				allowNull: false,
+				type: Sequelize.INTEGER,
+			},
 			createdAt: {
 				allowNull: false,
 				type: Sequelize.DATE,
@@ -29,6 +41,6 @@ module.exports = {
 	},
 
 	async down(queryInterface, Sequelize) {
-		await queryInterface.dropTable("Carts")
+		await queryInterface.dropTable('Carts');
 	},
 };
