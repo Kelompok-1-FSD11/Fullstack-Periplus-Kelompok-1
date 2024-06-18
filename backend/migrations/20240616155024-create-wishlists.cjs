@@ -17,6 +17,14 @@ module.exports = {
 					key: 'user_id',
 				},
 			},
+			product_id: {
+				allowNull: false,
+				type: Sequelize.UUID,
+				references: {
+					model: 'Products',
+					key: 'product_id',
+				},
+			},
 			createdAt: {
 				allowNull: false,
 				type: Sequelize.DATE,

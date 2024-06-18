@@ -18,6 +18,14 @@ export default (sequelize) => {
 					key: 'user_id',
 				},
 			},
+			product_id: {
+				allowNull: false,
+				type: DataTypes.UUID,
+				references: {
+					model: 'Products',
+					key: 'product_id',
+				},
+			},
 		},
 		{
 			timestamps: true,
@@ -26,7 +34,7 @@ export default (sequelize) => {
 
 	Wishlist.associate = (models) => {
 		Wishlist.belongsTo(models.User, { foreignKey: 'user_id' });
-		Wishlist.hasMany(models.WishlistItem);
+		Wishlist.belongsTo(models.Product, { foreignKey: 'product_id'})
 	};
 
 	return Wishlist;
