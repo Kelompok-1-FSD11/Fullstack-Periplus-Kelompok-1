@@ -2,7 +2,7 @@ import { DataTypes, UUIDV4 } from 'sequelize';
 
 export default (sequelize) => {
 	const ProductReview = sequelize.define(
-		'productReview',
+		'ProductReview',
 		{
 			product_review_id: {
 				allowNull: false,
@@ -28,7 +28,7 @@ export default (sequelize) => {
 			},
 			rating: {
 				allowNull: false,
-				type: DataTypes.TINYINT,
+				type: DataTypes.INTEGER,
 				validate: { min: 1, max: 5 },
 			},
 		},
