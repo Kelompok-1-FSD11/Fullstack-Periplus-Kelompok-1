@@ -2,10 +2,10 @@ import { DataTypes, UUIDV4 } from 'sequelize';
 
 export default (sequelize) => {
 	const Product = sequelize.define(
-		'product',
+		'Product',
 		{
 			product_id: {
-                allowNull: false,
+				allowNull: false,
 				primaryKey: true,
 				type: DataTypes.UUID,
 				defaultValue: UUIDV4,
@@ -19,14 +19,14 @@ export default (sequelize) => {
 			},
 			price: {
 				allowNull: false,
-				type: DECIMAL(10, 2),
+				type: DataTypes.DECIMAL(10, 2),
 			},
 			qty_stock: {
 				type: DataTypes.INTEGER,
 				defaultValue: 0,
 			},
 			category_id: {
-                allowNull: false,
+				allowNull: false,
 				type: DataTypes.UUID,
 				references: {
 					model: 'Categories',
@@ -34,7 +34,7 @@ export default (sequelize) => {
 				},
 			},
 			qty_sold: {
-                allowNull: false,
+				allowNull: false,
 				defaultValue: 0,
 				type: DataTypes.INTEGER,
 			},
@@ -50,14 +50,10 @@ export default (sequelize) => {
 
 	Product.associate = (models) => {
 		Product.belongsTo(models.Category, { foreignKey: 'category_id' });
-		Product.hasOne(models.ProductDetail);
 		Product.hasMany(models.OrderItem);
-		Product.hasMany(models.CartItem);
-		Product.hasMany(models.WishlistItem);
-		Product.hasMany(models.ProductReview, {
-			as: 'reviews',
-			foreignKey: 'product_id',
-		});
+		Product.hasMany(models.Cart);
+		Product.hasMany(models.Wishlist);
+		Product.hasMany(models.ProductReview);
 	};
 
 	return Product;
