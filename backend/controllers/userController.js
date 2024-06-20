@@ -1,57 +1,96 @@
-import bcryptjs from 'bcryptjs';
-import jwt from 'jsonwebtoken';
-import dotenv from 'dotenv';
 import importModels from '../models/index.js';
-dotenv.config();
 
-const dbPromise = importModels()
+const dbPromise = importModels();
 
-const register = async (req, res) => {
+// Mendapatkan data seluruh product setelah melakukan login
+const getAllProducts = async (req, res, next) => {
 	try {
-		const db = await dbPromise
-		const User = db.User
+		const db = await dbPromise;
+		const Product = db.Product;
+		const Category = db.Category;
 
-		const { user_fname, user_lname, email, password } = req.body;
-		const hashedPassword = await bcryptjs.hash(password, 10);
-
-		const user = await User.create({
-			user_fname,
-			user_lname,
-			email,
-			password: hashedPassword,
+		const products = await Product.findAll({
+			include: [
+				{
+					model: Category,
+				},
+			],
 		});
-		res.status(201).json({ message: 'User registered successfully', user });
+		res.json(products);
 	} catch (error) {
-		res.status(500).json({ error: error.message });
+		next(error);
 	}
 };
 
-const login = async (req, res) => {
+// Mendapatkan data wishlist sesuai user yang melakukan login
+const getUserWishlist = async (req, res, next) => {
+	try {
+		const db = await dbPromise;
+		const Wishlist = db.Wishlist;
+		const Product = db.Product;
+		const User = db.User;
+
+		const wishlists = await Wishlist.findAll({
+			where: { user_id: req.user.user_id },
+			include: [
+				{
+					model: Product,
+				},
+				{
+					model: User,
+				},
+			],
+		});
+		res.json(wishlists);
+	} catch (error) {
+		next(error);
+	}
+};
+
+// Mendapatkan data order sesuai user yang melakukan login
+const getAllUserOrder = async (req, res, next) => {
 	try {
 		const db = await dbPromise;
 		const User = db.User;
+		const Order = db.Order;
+		const Product = db.Product;
+		const OrderItem = db.OrderItem;
 
-		const { email, password } = req.body;
-		const user = await User.findOne({ where: { email } });
-		if (!user) {
-			res.status(401).json({ error: 'Invalid email' });
-		}
+		const orders = await Order.findAll({
+			where: { user_id: req.user.user_id },
+		});
 
-		const isPasswordValid = await bcryptjs.compare(password, user.password);
-		if (!isPasswordValid) {
-			res.status(401).json({ error: 'Invalid password' });
-		}
-
-		const token = jwt.sign(
-			{ user_id: user.id, email: user.email },
-			process.env.JWT_SECRET,
-			{ expiresIn: '1h' }
-		);
-
-		res.json({ message: 'Login successfull', token });
+		res.json(orders);
 	} catch (error) {
-		res.status(500).json({ error: error.message });
+		next(error);
 	}
 };
 
-export { login, register };
+//Mendapatkan data cart sesuai user yang login
+const getUserCart = async (req, res, next) => {
+	try {
+		const db = await dbPromise;
+		const Cart = db.Cart;
+		const User = db.User;
+		const Product = db.Product;
+
+		const carts = await Cart.findAll({
+			where: { user_id: req.user.user_id },
+			include: [
+				{
+					model: Product,
+				},
+				{
+					model: User,
+				},
+			],
+		});
+		res.json(carts);
+	} catch (error) {
+		next(error);
+	}
+};
+
+//Edit profil user
+
+export { getAllProducts, getUserWishlist, getAllUserOrder, getUserCart };
