@@ -1,7 +1,10 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import publicRoute from './routes/publicRoute.js';
+import userRoute from './routes/userRoute.js';
+import adminRoute from './routes/adminRoute.js';
 import importModels from './models/index.js';
+import errorHandler from './middlewares/errorHandler.js';
 
 dotenv.config();
 
@@ -14,6 +17,10 @@ const startServer = async () => {
 		app.use(express.json());
 
 		app.use('/api', publicRoute);
+		app.use('/api/user', userRoute);
+		app.use('/api/admin', adminRoute);
+
+		// app.use(errorHandler)
 
 		const PORT = process.env.PORT || 5000;
 

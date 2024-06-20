@@ -39,10 +39,10 @@ export default (sequelize) => {
 	);
 
 	User.associate = (models) => {
-		User.hasMany(models.Order);
-		User.hasMany(models.ProductReview);
-		User.hasOne(models.Cart);
-		User.hasOne(models.Wishlist);
+		User.hasMany(models.Order, { foreignKey: 'user_id' });
+		User.hasMany(models.ProductReview, { foreignKey: 'user_id' });
+		User.hasOne(models.Cart, { foreignKey: 'user_id' });
+		User.hasOne(models.Wishlist, { foreignKey: 'user_id' });
 	};
 
 	return User;
