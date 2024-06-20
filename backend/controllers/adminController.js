@@ -3,7 +3,7 @@ import importModels from '../models/index.js';
 const dbPromise = importModels();
 
 // Mengambil data semua product
-const getAllProducts = async (req, res) => {
+const getAllProducts = async (req, res, next) => {
 	try {
 		const db = await dbPromise;
 		const Product = db.Product;
@@ -18,12 +18,12 @@ const getAllProducts = async (req, res) => {
 		});
 		res.json(products);
 	} catch (error) {
-		res.status(500).json({ error: error.message });
+		next(error);
 	}
 };
 
 //Menambahkan product baru
-const addProduct = async (req, res) => {
+const addProduct = async (req, res, next) => {
 	try {
 		const db = await dbPromise;
 		const Product = db.Product;
@@ -44,20 +44,20 @@ const addProduct = async (req, res) => {
 			qty_stock,
 			category_id,
 			qty_sold,
-			image_path
+			image_path,
 		});
-		res.status(201).json({message: 'Product added successfully', addProducts})
-		console.log(req.body)
+		res.status(201).json({
+			message: 'Product added successfully',
+			addProducts,
+		});
+		console.log(req.body);
 	} catch (error) {
-		res.status(500).json({ error: error.message });
+		next(error);
 	}
 };
 
 //Menghapus product atau membuat statusnya menjadi inactive
 
-
 //Menghapus user atau membuat statusnya menjadi inactive
-
-
 
 export { getAllProducts, addProduct };

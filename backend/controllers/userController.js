@@ -3,7 +3,7 @@ import importModels from '../models/index.js';
 const dbPromise = importModels();
 
 // Mendapatkan data seluruh product setelah melakukan login
-const getAllProducts = async (req, res) => {
+const getAllProducts = async (req, res, next) => {
 	try {
 		const db = await dbPromise;
 		const Product = db.Product;
@@ -18,12 +18,12 @@ const getAllProducts = async (req, res) => {
 		});
 		res.json(products);
 	} catch (error) {
-		res.status(500).json({ error: error.message });
+		next(error);
 	}
 };
 
-// Medapatkan data wishlist sesuai user yang melakukan login
-const getUserWishlist = async (req, res) => {
+// Mendapatkan data wishlist sesuai user yang melakukan login
+const getUserWishlist = async (req, res, next) => {
 	try {
 		const db = await dbPromise;
 		const Wishlist = db.Wishlist;
@@ -43,12 +43,12 @@ const getUserWishlist = async (req, res) => {
 		});
 		res.json(wishlists);
 	} catch (error) {
-		res.status(500).json({ error: error.message });
+		next(error);
 	}
 };
 
 // Mendapatkan data order sesuai user yang melakukan login
-const getAllUserOrder = async (req, res) => {
+const getAllUserOrder = async (req, res, next) => {
 	try {
 		const db = await dbPromise;
 		const User = db.User;
@@ -60,19 +60,37 @@ const getAllUserOrder = async (req, res) => {
 			where: { user_id: req.user.user_id },
 		});
 
-		const orderItems = await OrderItem.findAll({
-			where: { order_id: res.json(orders).order_id}
-		});
-
-		// console.log(orders)
 		res.json(orders);
 	} catch (error) {
-		res.status(500).json({ error: error.message });
+		next(error);
+	}
+};
+
+//Mendapatkan data cart sesuai user yang login
+const getUserCart = async (req, res, next) => {
+	try {
+		const db = await dbPromise;
+		const Cart = db.Cart;
+		const User = db.User;
+		const Product = db.Product;
+
+		const carts = await Cart.findAll({
+			where: { user_id: req.user.user_id },
+			include: [
+				{
+					model: Product,
+				},
+				{
+					model: User,
+				},
+			],
+		});
+		res.json(carts);
+	} catch (error) {
+		next(error);
 	}
 };
 
 //Edit profil user
 
-
-
-export { getAllProducts, getUserWishlist, getAllUserOrder };
+export { getAllProducts, getUserWishlist, getAllUserOrder, getUserCart };

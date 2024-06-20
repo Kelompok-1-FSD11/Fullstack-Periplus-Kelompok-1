@@ -1,5 +1,5 @@
-import config from "./config.js";
+import config from './config.js';
 
 const dbConfig = config;
 
-console.log(dbConfig)
+console.log(dbConfig);

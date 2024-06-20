@@ -1,9 +1,6 @@
 const errorHandler = (err, req, res, next) => {
-    console.error(err)
+	console.error(err);
+	return res.status(500).json({ error: 'Something went wrong' });
+};
 
-    if (err.name === 'Unauthorized') {
-        return res.status(401).json({ error: 'Invalid email / password' });
-    }
-}
-
-export default errorHandler
+export default errorHandler;

@@ -20,7 +20,7 @@ const startServer = async () => {
 		app.use('/api/user', userRoute);
 		app.use('/api/admin', adminRoute);
 
-		// app.use(errorHandler)
+		app.use(errorHandler);
 
 		const PORT = process.env.PORT || 5000;
 
