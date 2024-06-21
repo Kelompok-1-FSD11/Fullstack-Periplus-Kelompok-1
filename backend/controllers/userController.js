@@ -8,11 +8,15 @@ const getAllProducts = async (req, res, next) => {
 		const db = await dbPromise;
 		const Product = db.Product;
 		const Category = db.Category;
+		const ProductReview = db.ProductReview;
 
 		const products = await Product.findAll({
 			include: [
 				{
 					model: Category,
+				},
+				{
+					model:ProductReview,
 				},
 			],
 		});
