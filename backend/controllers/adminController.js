@@ -59,6 +59,7 @@ const addProduct = async (req, res, next) => {
 	}
 };
 
+
 //Menghapus product atau membuat statusnya menjadi inactive
 
 //Menghapus user atau membuat statusnya menjadi inactive

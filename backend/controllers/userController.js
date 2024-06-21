@@ -95,6 +95,35 @@ const getUserCart = async (req, res, next) => {
 	}
 };
 
+/////////
+const addReview = async (req, res, next) => {
+	try {
+		const db = await dbPromise;
+		
+		const ProductReview = db.ProductReview;
+		const {
+			user_id,
+			product_id,
+			rating,
+		} = req.body;
+
+		const addReview  = await ProductReview.create({
+			user_id,
+			product_id,
+			rating,
+		});
+		res.status(201).json({
+			message: 'Review  added successfully',
+			addReview,
+		});
+		console.log(req.body);
+	} catch (error) {
+		next(error);
+	}
+};
+
+
+
 //Edit profil user
 
-export { getAllProducts, getUserWishlist, getAllUserOrder, getUserCart };
+export { getAllProducts, getUserWishlist, getAllUserOrder, getUserCart,addReview };
