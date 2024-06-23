@@ -50,14 +50,36 @@ const addProduct = async (req, res, next) => {
 			message: 'Product added successfully',
 			addProducts,
 		});
-		console.log(req.body);
 	} catch (error) {
 		next(error);
 	}
 };
 
+//Menambahkan category baru
+const addCategory = async (req, res, next) => {
+	try {
+		const db = await dbPromise
+		const Category = db.Category
+		const {
+			category_name,
+			description,
+		} = req.body
+
+		const addCategories = await Category.create({
+			category_name,
+			description
+		})
+		res.status(201).json({
+			message: 'Category added succesfully',
+			addCategories
+		})
+	} catch (error) {
+		next(error)
+	}
+}
+
 //Menghapus product atau membuat statusnya menjadi inactive
 
 //Menghapus user atau membuat statusnya menjadi inactive
 
-export { getAllProducts, addProduct };
+export { getAllProducts, addProduct, addCategory };
