@@ -8,6 +8,7 @@ import {
 	getAllUserOrder,
 	getUserCart,
 	getUserWishlist,
+	removeFromWishlist,
 } from '../controllers/userController.js';
 
 const router = express.Router();
@@ -19,5 +20,6 @@ router.get('/carts', authorize('user'), getUserCart);
 router.put('/edit-your-account', authorize('user'), editAccountInformation);
 router.post('/products-wishlists', authorize('user'), addToWishlist);
 router.post('/products-carts', authorize('user'), addToCart);
+router.delete('/product-wishlists', authorize('user'), removeFromWishlist);
 
 export default router;

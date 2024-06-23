@@ -122,6 +122,8 @@ const addToWishlist = async (req, res, next) => {
 		const { product_id } = req.body;
 		const userId = req.user.user_id;
 
+		//Perlu ditambahkan validasi jika barang sudah masuk di wishlist user, tidak bisa ditambahkan lagi
+
 		const addToWishlists = await Wishlist.create({
 			user_id: userId,
 			product_id,
@@ -129,6 +131,32 @@ const addToWishlist = async (req, res, next) => {
 		res.json({
 			message: 'The product was successfully added to your wishlist',
 			addToWishlists,
+		});
+	} catch (error) {
+		next(error);
+	}
+};
+
+//Menghapus produk dari wishlist user
+const removeFromWishlist = async (req, res, next) => {
+	try {
+		const db = await dbPromise;
+		const Wishlist = db.Wishlist;
+		const { product_id } = req.body;
+
+		const userWishlist = await Wishlist.findOne({
+			where: { user_id: req.user.user_id, product_id: product_id },
+		});
+		if (!userWishlist) {
+			return res
+				.status(404)
+				.json({ error: 'The product is not on your wishlist' });
+		}
+
+		await userWishlist.destroy();
+
+		res.json({
+			message: 'The product was successfully removed from your wishlist',
 		});
 	} catch (error) {
 		next(error);
@@ -166,4 +194,5 @@ export {
 	editAccountInformation,
 	addToWishlist,
 	addToCart,
+	removeFromWishlist,
 };
