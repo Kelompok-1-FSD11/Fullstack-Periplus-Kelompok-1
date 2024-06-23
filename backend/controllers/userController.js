@@ -1,3 +1,4 @@
+import { where } from 'sequelize';
 import importModels from '../models/index.js';
 
 const dbPromise = importModels();
@@ -92,5 +93,31 @@ const getUserCart = async (req, res, next) => {
 };
 
 //Edit profil user
+const editAccountInformation = async (req, res, next) => {
+	try {
+		const db = await dbPromise;
+		const User = db.User;
 
-export { getAllProducts, getUserWishlist, getAllUserOrder, getUserCart };
+		const { user_fname, user_lname } = req.body;
+
+		const user = await User.findOne({
+			where: { user_id: req.user.user_id },
+		});
+
+		user.user_fname = user_fname || user.user_fname;
+		user.user_lname = user_lname || user.user_lname;
+
+		await user.save();
+		res.json({ message: 'Your account updated successfully', user });
+	} catch (error) {
+		next(error);
+	}
+};
+
+export {
+	getAllProducts,
+	getUserWishlist,
+	getAllUserOrder,
+	getUserCart,
+	editAccountInformation,
+};
