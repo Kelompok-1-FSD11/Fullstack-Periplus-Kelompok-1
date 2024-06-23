@@ -114,10 +114,32 @@ const editAccountInformation = async (req, res, next) => {
 	}
 };
 
+//Menambahkan produk ke wishlist user
+const addToWishlist = async (req, res, next) => {
+	try {
+		const db = await dbPromise;
+		const Wishlist = db.Wishlist;
+		const { product_id } = req.body;
+		const userId = req.user.user_id;
+
+		const addToWishlists = await Wishlist.create({
+			user_id: userId,
+			product_id,
+		});
+		res.json({
+			message: 'The product was successfully added to your wishlist',
+			addToWishlists,
+		});
+	} catch (error) {
+		next(error);
+	}
+};
+
 export {
 	getAllProducts,
 	getUserWishlist,
 	getAllUserOrder,
 	getUserCart,
 	editAccountInformation,
+	addToWishlist,
 };
