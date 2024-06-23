@@ -135,6 +135,29 @@ const addToWishlist = async (req, res, next) => {
 	}
 };
 
+//Menambahkan produk ke cart user
+const addToCart = async (req, res, next) => {
+	try {
+		const db = await dbPromise;
+		const Cart = db.Cart;
+		const { product_id, quantity } = req.body;
+		const userId = req.user.user_id;
+
+		const addToCarts = await Cart.create({
+			user_id: userId,
+			product_id,
+			quantity,
+		});
+
+		res.json({
+			message: 'The product was successfully addedto your cart',
+			addToCarts,
+		});
+	} catch (error) {
+		next(error);
+	}
+};
+
 export {
 	getAllProducts,
 	getUserWishlist,
@@ -142,4 +165,5 @@ export {
 	getUserCart,
 	editAccountInformation,
 	addToWishlist,
+	addToCart,
 };
