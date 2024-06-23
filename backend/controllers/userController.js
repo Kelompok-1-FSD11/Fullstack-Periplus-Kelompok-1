@@ -186,6 +186,34 @@ const addToCart = async (req, res, next) => {
 	}
 };
 
+//Merubah quantity tiap produk yang ada di User Cart & menghapus produk yang memiliki quantity 0
+const removeFromCart = async (req, res, next) => {
+	try {
+		const db = await dbPromise;
+		const Cart = db.Cart;
+		const { product_id, quantity } = req.body;
+
+		const userCart = await Cart.findOne({
+			where: {
+				user_id: req.user.user_id,
+				product_id: product_id,
+			},
+		});
+
+		userCart.quantity = quantity;
+
+		await userCart.save();
+
+		if (userCart.quantity === 0) {
+			await userCart.destroy();
+		}
+
+		res.json({ message: 'Your cart was successfully updated' });
+	} catch (error) {
+		next(error);
+	}
+};
+
 export {
 	getAllProducts,
 	getUserWishlist,
@@ -195,4 +223,5 @@ export {
 	addToWishlist,
 	addToCart,
 	removeFromWishlist,
+	removeFromCart,
 };
