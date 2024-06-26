@@ -1,11 +1,16 @@
 import express from 'express';
 import { authorize } from '../middlewares/auth.js';
 import {
+	addReview,
 	addToCart,
 	addToWishlist,
 	editAccountInformation,
 	getAllProducts,
 	getAllUserOrder,
+	getProductsByCategoryName,
+	getProductsByMaxPrice,
+	getProductsByMinPrice,
+	getProductsByName,
 	getUserCart,
 	getUserWishlist,
 	removeFromCart,
@@ -23,5 +28,10 @@ router.post('/products-wishlists', authorize('user'), addToWishlist);
 router.post('/products-carts', authorize('user'), addToCart);
 router.delete('/products-wishlists', authorize('user'), removeFromWishlist);
 router.put('/products-carts', authorize('user'), removeFromCart)
+router.post('/add-review', authorize('user'), addReview);
+router.get('/products/name/:productName', getProductsByName);
+router.get('/products/category/:categoryName', getProductsByCategoryName);
+router.get('/products/minPrice/:minPrice', getProductsByMinPrice);
+router.get('/products/maxPrice/:maxPrice', getProductsByMaxPrice);
 
 export default router;
