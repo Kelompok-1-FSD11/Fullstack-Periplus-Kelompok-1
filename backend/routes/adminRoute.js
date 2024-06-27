@@ -2,6 +2,12 @@ import {
 	addProduct,
 	getAllProducts,
 	addCategory,
+	deleteProduct,
+	updateProduct,
+	getProductsByName,
+	getProductsByCategoryName,
+	getProductsByMinPrice,
+	getProductsByMaxPrice,
 } from '../controllers/adminController.js';
 import express from 'express';
 import { authorize } from '../middlewares/auth.js';
