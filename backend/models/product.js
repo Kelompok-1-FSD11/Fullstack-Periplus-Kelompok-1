@@ -42,6 +42,11 @@ export default (sequelize) => {
 				allowNull: false,
 				type: DataTypes.STRING,
 			},
+			// isActive: {
+			// 	allowNull: false,
+			// 	type: DataTypes.BOOLEAN,
+			// 	defaultValue: true,
+			// },
 		},
 		{
 			timestamps: true,

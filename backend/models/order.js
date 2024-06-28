@@ -11,7 +11,7 @@ export default (sequelize) => {
 				primaryKey: true,
 			},
 			user_id: {
-                allowNull: false,
+				allowNull: false,
 				type: DataTypes.UUID,
 				references: {
 					model: 'Users',
@@ -25,6 +25,7 @@ export default (sequelize) => {
 			status: {
 				allowNull: false,
 				type: DataTypes.STRING,
+				defaultValue: 'Unpaid',
 			},
 		},
 		{
