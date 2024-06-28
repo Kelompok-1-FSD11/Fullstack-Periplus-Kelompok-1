@@ -312,6 +312,176 @@ const createOrder = async (req, res, next) => {
 		await transaction.rollback();
 		next(error);
 	}
+  
+ 
+// Menambahkan User review ke product
+const addReview = async (req, res, next) => {
+	try {
+		const db = await dbPromise;
+		
+		const ProductReview = db.ProductReview;
+		const {
+			user_id,
+			product_id,
+			rating,
+		} = req.body;
+
+		const addReviews  = await ProductReview.create({
+			user_id,
+			product_id,
+			rating,
+		});
+		res.status(201).json({
+			message: 'Review  added successfully',
+			addReviews,
+		});
+		console.log(req.body);
+	} catch (error) {
+		next(error);
+	}
+};
+
+const getProductsByName = async (req, res, next) => {
+	try {
+	const db = await dbPromise;
+	const Product = db.Product;
+	const Category = db.Category;
+	const ProductReview = db.ProductReview;
+	const { productName } = req.params;
+
+
+	const products = await Product.findAll({
+		where: {
+		product_name: productName,
+		},
+		include: [
+		{
+			model: Category,
+		},
+		{
+			model: ProductReview,
+		},
+		],
+	});
+
+	  // Jika produk tidak ditemukan, kirimkan respons 404
+	if (products.length === 0) {
+		return res.status(404).json({
+		message: 'Product not found',
+		});
+	}
+
+	  // Mengirimkan respons dengan produk yang ditemukan
+	res.json(products);
+	} catch (error) {
+	next(error);
+	}
+};
+
+  
+// Filter product berdasarkan Category
+const getProductsByCategoryName = async (req, res, next) => {
+	try {
+		const db = await dbPromise;
+		const Category = db.Category;
+		const Product = db.Product;
+		const { category_name } = req.params;
+
+	
+		const categories = await Category.findAll({
+			where: {
+				category_name: category_name,
+			},
+			include: [
+				{
+					model: Category,
+				},
+				{
+					model: Product,
+				},
+				],
+		});
+
+	
+		if (categories.length === 0) {
+			return res.status(404).json({
+				message: 'Category not found',
+			});
+		}
+
+		
+		res.json(categories);
+	} catch (error) {
+		next(error);
+	}
+};
+
+  
+// Filter product dengan harga terendah
+const getProductsByMinPrice = async (req, res, next) => {
+    try {
+        const db = await dbPromise;
+        const Product = db.Product;
+        const { minPrice } = req.params;
+
+        const products = await Product.findAll({
+            where: {
+                price: {
+                    [db.Sequelize.Op.gte]: minPrice,
+                },
+            },
+            include: [
+                {
+                    model: Product,
+                },
+
+            ],
+        });
+
+        if (products.length === 0) {
+            return res.status(404).json({
+                message: 'No products found above the specified price',
+            });
+        }
+
+        res.json(products);
+    } catch (error) {
+        next(error);
+    }
+};
+
+
+// Filter product dengan harga tertinggi
+const getProductsByMaxPrice = async (req, res, next) => {
+    try {
+        const db = await dbPromise;
+        const Product = db.Product;
+        const { maxPrice } = req.params;
+
+        const products = await Product.findAll({
+            where: {
+                price: {
+                    [db.Sequelize.Op.lte]: maxPrice,
+                },
+            },
+            include: [
+                {
+                    model: Product,
+                },
+
+            ],
+        });
+
+        if (products.length === 0) {
+            return res.status(404).json({
+                message: 'No products found above the specified price',
+            });
+        }
+
+        res.json(products);
+    } catch (error) {
+        next(error);
+    }
 };
 
 export {
@@ -325,4 +495,9 @@ export {
 	removeFromWishlist,
 	removeFromCart,
 	createOrder,
+	addReview,
+	getProductsByName,
+	getProductsByCategoryName,
+	getProductsByMinPrice,
+	getProductsByMaxPrice
 };
