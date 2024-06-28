@@ -67,7 +67,7 @@ const getAllUserOrder = async (req, res, next) => {
 	}
 };
 
-//Mendapatkan data cart sesuai user yang login
+// Mendapatkan data cart sesuai user yang login
 const getUserCart = async (req, res, next) => {
 	try {
 		const db = await dbPromise;
@@ -92,7 +92,7 @@ const getUserCart = async (req, res, next) => {
 	}
 };
 
-//Edit profil user
+// Edit profil user
 const editAccountInformation = async (req, res, next) => {
 	try {
 		const db = await dbPromise;
@@ -114,7 +114,7 @@ const editAccountInformation = async (req, res, next) => {
 	}
 };
 
-//Menambahkan produk ke wishlist user
+// Menambahkan produk ke wishlist user
 const addToWishlist = async (req, res, next) => {
 	try {
 		const db = await dbPromise;
@@ -122,7 +122,16 @@ const addToWishlist = async (req, res, next) => {
 		const { product_id } = req.body;
 		const userId = req.user.user_id;
 
-		//Perlu ditambahkan validasi jika barang sudah masuk di wishlist user, tidak bisa ditambahkan lagi
+		// Cek apakah product sudah ada dalam wishlist user
+		const checkWishlist = await Wishlist.findOne({
+			where: { user_id: req.user.user_id, product_id: product_id },
+		});
+
+		if (checkWishlist) {
+			return res.status(404).json({
+				message: 'Sorry this product already on your wishlist',
+			});
+		}
 
 		const addToWishlists = await Wishlist.create({
 			user_id: userId,
@@ -137,7 +146,7 @@ const addToWishlist = async (req, res, next) => {
 	}
 };
 
-//Menghapus produk dari wishlist user
+// Menghapus produk dari wishlist user
 const removeFromWishlist = async (req, res, next) => {
 	try {
 		const db = await dbPromise;
@@ -163,11 +172,11 @@ const removeFromWishlist = async (req, res, next) => {
 	}
 };
 
-//Menambahkan produk ke cart user
+// Menambahkan produk ke cart user
 const addToCart = async (req, res, next) => {
 	try {
 		const db = await dbPromise;
-		const Cart = db.Cart;
+		const { Cart, Product } = db;
 		const { product_id, quantity } = req.body;
 		const userId = req.user.user_id;
 
@@ -177,8 +186,19 @@ const addToCart = async (req, res, next) => {
 			quantity,
 		});
 
+		// Membatasi user agar tidak bisa menambahkan quantity product melebihi qty_stock product ke cart
+		const product = await Product.findOne({
+			where: { product_id: product_id },
+		});
+
+		if (product.qty_stock < quantity) {
+			return res.status(404).json({
+				error: `You can only add ${product.qty_stock} pcs to your cart`,
+			});
+		}
+
 		res.json({
-			message: 'The product was successfully addedto your cart',
+			message: 'The product was successfully added to your cart',
 			addToCarts,
 		});
 	} catch (error) {
@@ -186,7 +206,7 @@ const addToCart = async (req, res, next) => {
 	}
 };
 
-//Merubah quantity tiap produk yang ada di User Cart & menghapus produk yang memiliki quantity 0
+// Merubah quantity tiap produk yang ada di User Cart & menghapus produk yang memiliki quantity 0
 const removeFromCart = async (req, res, next) => {
 	try {
 		const db = await dbPromise;
@@ -214,7 +234,87 @@ const removeFromCart = async (req, res, next) => {
 	}
 };
 
+// Checkout produk yang ada di cart
+const createOrder = async (req, res, next) => {
+	const db = await dbPromise;
+	const transaction = await db.sequelize.transaction();
+	try {
+		const db = await dbPromise;
+		const { Cart, OrderItem, Product, Order } = db;
+		const userId = req.user.user_id;
 
+		const userCartItems = await Cart.findAll({
+			where: {
+				user_id: userId,
+			},
+			include: [
+				{
+					model: Product,
+				},
+			],
+		});
+
+		if (userCartItems.length === 0) {
+			return res.status(400).json({ message: 'No items in your cart' });
+		}
+
+		const totalAmount = userCartItems.reduce(
+			(acc, item) => acc + item.Product.price * item.quantity,
+			0
+		);
+
+		const orders = await Order.create(
+			{
+				user_id: userId,
+				total_amount: totalAmount,
+				status: 'Pending',
+			},
+			{ transaction }
+		);
+
+		// Create orderItem berdasarkan cart yang di checkout
+		const orderItems = userCartItems.map((item) => ({
+			order_id: orders.order_id,
+			product_id: item.product_id,
+			quantity: item.quantity,
+			price: item.Product.price,
+		}));
+
+		await OrderItem.bulkCreate(orderItems, { transaction });
+
+		// Update qty_stock dan qty_sold product ketika barang di checkout
+		for (const item of userCartItems) {
+			const product = await Product.findOne({
+				where: { product_id: item.product_id },
+			});
+
+			//Error ketika stock kurang dari yang akan dicheckout
+			if (product.qty_stock < item.quantity) {
+				throw new error(
+					`Insufficient stock for product ${product.product_name}`
+				);
+			}
+			product.qty_stock -= item.quantity;
+			product.qty_sold += item.quantity;
+			await product.save();
+		}
+
+		// Hapus cart ketika barang dari cart sudah di checkout
+		await Cart.destroy({ where: { user_id: userId }, transaction });
+
+		await transaction.commit();
+
+		res.status(201).json({
+			message: 'Your order submitted successfully',
+			orders,
+		});
+	} catch (error) {
+		await transaction.rollback();
+		next(error);
+	}
+  
+ 
+// Menambahkan User review ke product
 const addReview = async (req, res, next) => {
 	try {
 		const db = await dbPromise;
@@ -278,6 +378,8 @@ const getProductsByName = async (req, res, next) => {
 	}
 };
 
+  
+// Filter product berdasarkan Category
 const getProductsByCategoryName = async (req, res, next) => {
 	try {
 		const db = await dbPromise;
@@ -314,6 +416,8 @@ const getProductsByCategoryName = async (req, res, next) => {
 	}
 };
 
+  
+// Filter product dengan harga terendah
 const getProductsByMinPrice = async (req, res, next) => {
     try {
         const db = await dbPromise;
@@ -345,7 +449,9 @@ const getProductsByMinPrice = async (req, res, next) => {
         next(error);
     }
 };
-////////////////////
+
+
+// Filter product dengan harga tertinggi
 const getProductsByMaxPrice = async (req, res, next) => {
     try {
         const db = await dbPromise;
@@ -388,6 +494,7 @@ export {
 	addToCart,
 	removeFromWishlist,
 	removeFromCart,
+	createOrder,
 	addReview,
 	getProductsByName,
 	getProductsByCategoryName,
