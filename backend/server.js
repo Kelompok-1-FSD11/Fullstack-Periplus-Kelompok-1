@@ -1,37 +1,16 @@
-import express from 'express';
-import dotenv from 'dotenv';
+import express from "express";
+import cors from "cors";
 import publicRoute from './routes/publicRoute.js';
 import userRoute from './routes/userRoute.js';
 import adminRoute from './routes/adminRoute.js';
-import importModels from './models/index.js';
-import errorHandler from './middlewares/errorHandler.js';
 
-dotenv.config();
+const app = express();
+app.use(cors());
+app.use(express.json());
+app.use('/api', publicRoute);
+app.use('/api/user', userRoute);
+app.use('/api/admin', adminRoute);
 
-const startServer = async () => {
-	try {
-		const db = await importModels();
+const PORT = process.env.PORT || 5000;
 
-		const app = express();
-
-		app.use(express.json());
-
-		app.use('/api', publicRoute);
-		app.use('/api/user', userRoute);
-		app.use('/api/admin', adminRoute);
-
-		app.use(errorHandler);
-
-		const PORT = process.env.PORT || 5000;
-
-		db.sequelize.sync().then(() => {
-			app.listen(PORT, () => {
-				console.log(`Server is running on port ${PORT}`);
-			});
-		});
-	} catch (error) {
-		console.error('Unable to start the server:', error);
-	}
-};
-
-startServer();
+app.listen(PORT, ()=> console.log(`Server up and running on port ${PORT}`));
