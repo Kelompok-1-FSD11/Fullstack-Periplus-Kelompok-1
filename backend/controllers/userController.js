@@ -191,14 +191,16 @@ const addToCart = async (req, res, next) => {
 			});
 		}
 
-		const userCart = await Cart.findOne({ where: {
-			user_id: userId,
-			product_id: product_id
-		}})
+		const userCart = await Cart.findOne({
+			where: {
+				user_id: userId,
+				product_id: product_id,
+			},
+		});
 
 		if (userCart) {
-			userCart.quantity += quantity
-			await userCart.save()
+			userCart.quantity += quantity;
+			await userCart.save();
 		}
 
 		const addToCarts = await Cart.create({
@@ -322,21 +324,17 @@ const createOrder = async (req, res, next) => {
 		await transaction.rollback();
 		next(error);
 	}
-  
- 
+};
+
 // Menambahkan User review ke product
 const addReview = async (req, res, next) => {
 	try {
 		const db = await dbPromise;
-		
-		const ProductReview = db.ProductReview;
-		const {
-			user_id,
-			product_id,
-			rating,
-		} = req.body;
 
-		const addReviews  = await ProductReview.create({
+		const ProductReview = db.ProductReview;
+		const { user_id, product_id, rating } = req.body;
+
+		const addReviews = await ProductReview.create({
 			user_id,
 			product_id,
 			rating,
@@ -353,42 +351,40 @@ const addReview = async (req, res, next) => {
 
 const getProductsByName = async (req, res, next) => {
 	try {
-	const db = await dbPromise;
-	const Product = db.Product;
-	const Category = db.Category;
-	const ProductReview = db.ProductReview;
-	const { productName } = req.params;
+		const db = await dbPromise;
+		const Product = db.Product;
+		const Category = db.Category;
+		const ProductReview = db.ProductReview;
+		const { productName } = req.params;
 
-
-	const products = await Product.findAll({
-		where: {
-		product_name: productName,
-		},
-		include: [
-		{
-			model: Category,
-		},
-		{
-			model: ProductReview,
-		},
-		],
-	});
-
-	  // Jika produk tidak ditemukan, kirimkan respons 404
-	if (products.length === 0) {
-		return res.status(404).json({
-		message: 'Product not found',
+		const products = await Product.findAll({
+			where: {
+				product_name: productName,
+			},
+			include: [
+				{
+					model: Category,
+				},
+				{
+					model: ProductReview,
+				},
+			],
 		});
-	}
 
-	  // Mengirimkan respons dengan produk yang ditemukan
-	res.json(products);
+		// Jika produk tidak ditemukan, kirimkan respons 404
+		if (products.length === 0) {
+			return res.status(404).json({
+				message: 'Product not found',
+			});
+		}
+
+		// Mengirimkan respons dengan produk yang ditemukan
+		res.json(products);
 	} catch (error) {
-	next(error);
+		next(error);
 	}
 };
 
-  
 // Filter product berdasarkan Category
 const getProductsByCategoryName = async (req, res, next) => {
 	try {
@@ -397,7 +393,6 @@ const getProductsByCategoryName = async (req, res, next) => {
 		const Product = db.Product;
 		const { category_name } = req.params;
 
-	
 		const categories = await Category.findAll({
 			where: {
 				category_name: category_name,
@@ -409,89 +404,83 @@ const getProductsByCategoryName = async (req, res, next) => {
 				{
 					model: Product,
 				},
-				],
+			],
 		});
 
-	
 		if (categories.length === 0) {
 			return res.status(404).json({
 				message: 'Category not found',
 			});
 		}
 
-		
 		res.json(categories);
 	} catch (error) {
 		next(error);
 	}
 };
 
-  
 // Filter product dengan harga terendah
 const getProductsByMinPrice = async (req, res, next) => {
-    try {
-        const db = await dbPromise;
-        const Product = db.Product;
-        const { minPrice } = req.params;
+	try {
+		const db = await dbPromise;
+		const Product = db.Product;
+		const { minPrice } = req.params;
 
-        const products = await Product.findAll({
-            where: {
-                price: {
-                    [db.Sequelize.Op.gte]: minPrice,
-                },
-            },
-            include: [
-                {
-                    model: Product,
-                },
+		const products = await Product.findAll({
+			where: {
+				price: {
+					[db.Sequelize.Op.gte]: minPrice,
+				},
+			},
+			include: [
+				{
+					model: Product,
+				},
+			],
+		});
 
-            ],
-        });
+		if (products.length === 0) {
+			return res.status(404).json({
+				message: 'No products found above the specified price',
+			});
+		}
 
-        if (products.length === 0) {
-            return res.status(404).json({
-                message: 'No products found above the specified price',
-            });
-        }
-
-        res.json(products);
-    } catch (error) {
-        next(error);
-    }
+		res.json(products);
+	} catch (error) {
+		next(error);
+	}
 };
-
 
 // Filter product dengan harga tertinggi
 const getProductsByMaxPrice = async (req, res, next) => {
-    try {
-        const db = await dbPromise;
-        const Product = db.Product;
-        const { maxPrice } = req.params;
+	try {
+		const db = await dbPromise;
+		const Product = db.Product;
+		const { maxPrice } = req.params;
 
-        const products = await Product.findAll({
-            where: {
-                price: {
-                    [db.Sequelize.Op.lte]: maxPrice,
-                },
-            },
-            include: [
-                {
-                    model: Product,
-                },
+		const products = await Product.findAll({
+			where: {
+				price: {
+					[db.Sequelize.Op.lte]: maxPrice,
+				},
+			},
+			include: [
+				{
+					model: Product,
+				},
+			],
+		});
 
-            ],
-        });
+		if (products.length === 0) {
+			return res.status(404).json({
+				message: 'No products found above the specified price',
+			});
+		}
 
-        if (products.length === 0) {
-            return res.status(404).json({
-                message: 'No products found above the specified price',
-            });
-        }
-
-        res.json(products);
-    } catch (error) {
-        next(error);
-    }
+		res.json(products);
+	} catch (error) {
+		next(error);
+	}
 };
 
 export {
@@ -509,5 +498,5 @@ export {
 	getProductsByName,
 	getProductsByCategoryName,
 	getProductsByMinPrice,
-	getProductsByMaxPrice
+	getProductsByMaxPrice,
 };
