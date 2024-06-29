@@ -5,6 +5,7 @@ import userRoute from './routes/userRoute.js';
 import adminRoute from './routes/adminRoute.js';
 import importModels from './models/index.js';
 import errorHandler from './middlewares/errorHandler.js';
+import cors from 'cors';
 
 dotenv.config();
 
@@ -13,6 +14,8 @@ const startServer = async () => {
 		const db = await importModels();
 
 		const app = express();
+
+		app.use(cors());
 
 		app.use(express.json());
 
