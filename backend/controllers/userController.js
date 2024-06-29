@@ -302,9 +302,11 @@ const createOrder = async (req, res, next) => {
 
 			//Error ketika stock kurang dari yang akan dicheckout
 			if (product.qty_stock < item.quantity) {
-				throw new error(
-					`Insufficient stock for product ${product.product_name}`
-				);
+				return res
+					.status(404)
+					.json({
+						message: `Insufficient stock for product ${product.product_name}`,
+					});
 			}
 			product.qty_stock -= item.quantity;
 			product.qty_sold += item.quantity;
