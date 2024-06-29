@@ -4,6 +4,7 @@ import {
 	addReview,
 	addToCart,
 	addToWishlist,
+	createOrder,
 	editAccountInformation,
 	getAllProducts,
 	getAllUserOrder,
@@ -27,6 +28,8 @@ router.put('/edit-your-account', authorize('user'), editAccountInformation);
 router.post('/products-wishlists', authorize('user'), addToWishlist);
 router.post('/products-carts', authorize('user'), addToCart);
 router.delete('/products-wishlists', authorize('user'), removeFromWishlist);
+router.put('/products-carts', authorize('user'), removeFromCart);
+router.post('/create-orders', authorize('user'), createOrder);
 router.put('/products-carts', authorize('user'), removeFromCart)
 router.post('/add-review', authorize('user'), addReview);
 router.get('/products/name/:productName', getProductsByName);

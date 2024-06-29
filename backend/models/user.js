@@ -32,6 +32,11 @@ export default (sequelize) => {
 				defaultValue: 'user',
 				type: DataTypes.STRING,
 			},
+			// isActive: {
+			// 	allowNull: false,
+			// 	type: DataTypes.BOOLEAN,
+			// 	defaultValue: true,
+			// },
 		},
 		{
 			timestamps: true,
