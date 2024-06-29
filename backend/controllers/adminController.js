@@ -118,7 +118,7 @@ const updateProduct = async (req, res, next) => {
 			image_path,
 		} = req.body;
 
-		// Memperbarui produk
+	
 		const [updated] = await Product.update({
 			product_name,
 			product_description,
@@ -131,7 +131,7 @@ const updateProduct = async (req, res, next) => {
 			where: {product_id: productId },
 		});
 
-		// Memeriksa apakah ada baris yang diperbarui
+		
 		if (updated) {
 			const updatedProduct = await Product.findByPk(productId);
 			res.status(200).json({
@@ -171,14 +171,13 @@ const updateProduct = async (req, res, next) => {
 			],
 		});
 	
-		  // Jika produk tidak ditemukan, kirimkan respons 404
+		
 		if (products.length === 0) {
 			return res.status(404).json({
 			message: 'Product not found',
 			});
 		}
 	
-		  // Mengirimkan respons dengan produk yang ditemukan
 		res.json(products);
 		} catch (error) {
 		next(error);
@@ -285,8 +284,40 @@ const getProductsByMaxPrice = async (req, res, next) => {
         next(error);
     }
 };
+//hapus Category
+const deleteCategory = async (req, res, next) => {
+    try {
+        const db = await dbPromise;
+        const Category = db.Category;
+        const { categoryId } = req.params;
+
+     
+        const category = await Category.findByPk(categoryId);
+
+    
+        if (!category) {
+            return res.status(404).json({
+                message: 'Category not found',
+            });
+        }
+
+     
+        await Category.destroy({
+            where: {
+                category_id: categoryId,
+            },
+        });
+
+        res.status(200).json({
+            message: 'Category deleted successfully',
+        });
+    } catch (error) {
+        next(error); // Tangani error dengan middleware error handler
+    }
+};
+
 //Menghapus product atau membuat statusnya menjadi inactive
 
 //Menghapus user atau membuat statusnya menjadi inactive
 
-export { getAllProducts, addProduct, addCategory, deleteProduct, updateProduct, getProductsByName,getProductsByCategoryName, getProductsByMinPrice, getProductsByMaxPrice};
+export { getAllProducts, addProduct, addCategory, deleteProduct, updateProduct, getProductsByName,getProductsByCategoryName, getProductsByMinPrice, getProductsByMaxPrice, deleteCategory};
