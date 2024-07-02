@@ -1,0 +1,148 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+   
+    font-family:  'sans-serif','Open Sans';
+  }
+  html {
+    font-size: 14px;
+  }
+  
+  .container{
+    background-color: white;
+    min-height: 580px;
+  }
+  .logo {
+    display: flex;
+    justify-content: center;
+    padding-top: 25px;
+  }
+  
+  .login-form {
+    width: 412px;
+    background-color: #fff;
+    position: absolute;
+    border: 1px solid #ccc;
+    padding: 15px;
+    top: 115px;
+    left: 0;
+    right: 0;
+    margin: auto;
+    height: auto;
+  
+  }
+  .heading1 {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 4px;
+  
+  }
+  .heading1 h1 {
+    
+    position: relative;
+  
+    font-size: 25px;
+    line-height: 32px;
+    letter-spacing: 1px;
+    color: #212121;
+    font-family: sans-serif;
+    margin-bottom: 12px;
+    color: #DF722C;
+  }
+  
+  .heading1 a {
+    margin-left: 20px;
+    text-decoration: none;
+    font-size: 14px;
+    color: #041dff;
+  }
+
+  .submit {
+    border: none;
+    outline: none;
+    border-radius: 5px;
+    
+    background-color: #0067B1;
+    color: #ffffff;
+    width: 30%;
+    height: 30px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-size: 15px;
+    font-weight: bold;
+  }
+  
+  .Privacy {
+   
+  
+    text-align: left;
+    margin-bottom: 18px;
+  }
+  .Privacy p {
+    font-size: 13px;
+    text-decoration: none;
+    
+   
+  }
+  
+  
+  
+  
+  footer {
+    margin-top: 550px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  
+    font-size: 12px;
+  
+  }
+  footer span {
+    color: rgba(0, 0, 0, 0.54);
+  }
+  footer span a {
+    display: inline-block;
+    color: #041dff;
+    text-decoration: none;
+    padding-left: 16px;
+    margin-left: 16px;
+    font-weight: 600;
+    line-height: 1.33;
+    border-left: 1px solid #bfc9d9;
+    cursor: pointer;
+  }
+  
+  
+  label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+    font-size: 18px;
+  }
+  
+  input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    margin-bottom: 10px;
+  }
+  input[type="email"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    margin-bottom: 5px;
+  }
+  input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    margin-bottom: 5px;
+  }
