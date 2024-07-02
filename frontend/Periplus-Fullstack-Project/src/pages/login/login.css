@@ -1,0 +1,145 @@
+* {
+
+  box-sizing: border-box;
+  font-family: 'Open Sans', sans-serif;
+}
+
+.container{
+  background-color: white;
+ 
+}
+.logo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.login-form {
+  
+  max-width: 400px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  margin-top: 20px;
+}
+
+.login-form .heading1 h1 {
+  text-align: center;
+  color: #ff6600;
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+.login-form label {
+  display: block;
+  margin: 10px 0 5px;
+  font-weight: bold;
+  text-align: left;
+}
+
+input[type="password"] {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  margin-bottom: 10px;
+}
+input[type="email"] {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  margin-bottom: 5px;
+}
+
+.login-form .next {
+  width: 100%;
+  padding: 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-bottom: 10px;
+}
+
+.login-form .next span {
+  display: block;
+  text-align: center;
+}
+
+
+
+
+
+
+
+.email-input {
+  margin-top: 50px;
+}
+
+.register,
+.forgot {
+  display: flex;
+  padding-top: 10px;
+}
+
+.register a,.forgot a {
+  font-size: 15px;
+  text-decoration: none;
+  color: #041dff;
+  cursor: pointer;
+}
+
+
+.option {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 15px;
+}
+
+.option a {
+  font-size: 12px;
+  font-weight: bold;
+}
+
+footer {
+  margin-top: 20px; /* Adjusted for better positioning */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 12px;
+}
+
+footer span {
+  color: rgba(0, 0, 0, 0.54);
+}
+
+footer span a {
+  display: inline-block;
+  color: #041dff;
+  text-decoration: none;
+  padding-left: 16px;
+  margin-left: 16px;
+  font-weight: 600;
+  border-left: 1px solid #bfc9d9;
+  cursor: pointer;
+}
+
+
+
+
+
+.google {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 10px;
+}
