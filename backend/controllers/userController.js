@@ -180,12 +180,6 @@ const addToCart = async (req, res, next) => {
 		const { product_id, quantity } = req.body;
 		const userId = req.user.user_id;
 
-		const addToCarts = await Cart.create({
-			user_id: userId,
-			product_id,
-			quantity,
-		});
-
 		// Membatasi user agar tidak bisa menambahkan quantity product melebihi qty_stock product ke cart
 		const product = await Product.findOne({
 			where: { product_id: product_id },
@@ -196,6 +190,24 @@ const addToCart = async (req, res, next) => {
 				error: `You can only add ${product.qty_stock} pcs to your cart`,
 			});
 		}
+
+		const userCart = await Cart.findOne({
+			where: {
+				user_id: userId,
+				product_id: product_id,
+			},
+		});
+
+		if (userCart) {
+			userCart.quantity += quantity;
+			await userCart.save();
+		}
+
+		const addToCarts = await Cart.create({
+			user_id: userId,
+			product_id,
+			quantity,
+		});
 
 		res.json({
 			message: 'The product was successfully added to your cart',
@@ -290,9 +302,11 @@ const createOrder = async (req, res, next) => {
 
 			//Error ketika stock kurang dari yang akan dicheckout
 			if (product.qty_stock < item.quantity) {
-				throw new error(
-					`Insufficient stock for product ${product.product_name}`
-				);
+				return res
+					.status(404)
+					.json({
+						message: `Insufficient stock for product ${product.product_name}`,
+					});
 			}
 			product.qty_stock -= item.quantity;
 			product.qty_sold += item.quantity;
