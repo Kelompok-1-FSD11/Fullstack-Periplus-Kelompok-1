@@ -4,7 +4,7 @@ import Button from "../../../base/Button";
 const NavAuth = () => {
   const navigate = useNavigate();
   return (
-    <div className="hidden xl:flex gap-x-3 items-center w-96">
+    <div className="hidden xl:flex gap-x-3 items-center w-100">
       <div>
         <svg
           xmlns="http://www.w3.org/2000/svg"

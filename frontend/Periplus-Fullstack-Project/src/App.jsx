@@ -4,10 +4,12 @@ import DetailBooks from "./pages/detail-books";
 import Required from "./configs/middleware";
 import Cart from "./pages/cart";
 import Login from "./pages/auth/login";
+import Register from "./pages/auth/register";
 
 const router = createBrowserRouter([
   { path: "/", element: <Home /> },
   { path: "/login", element: <Login /> },
+  { path: "/register", element: <Register />},
   { path: "/detail/:name", element: <DetailBooks /> },
   {
     element: <Required />,

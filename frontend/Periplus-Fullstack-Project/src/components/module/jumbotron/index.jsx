@@ -30,7 +30,7 @@ const Jumbotron = () => {
           <div key={idx}>
             <img
               key={idx}
-              className="object-fit xl:h-[500px] rounded max-w-full cursor-pointer"
+              className="object-fit xl:h-[400px] rounded max-w-full cursor-pointer"
               src={item}
             />
           </div>
