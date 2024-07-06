@@ -18,11 +18,11 @@ export default (sequelize) => {
 			description: {
 				type: DataTypes.TEXT,
 			},
-			// isActive: {
-			// 	allowNull: false,
-			// 	type: DataTypes.BOOLEAN,
-			// 	defaultValue: true,
-			// },
+			isActive: {
+				allowNull: false,
+				type: DataTypes.BOOLEAN,
+				defaultValue: true,
+			},
 		},
 		{
 			timestamps: true,

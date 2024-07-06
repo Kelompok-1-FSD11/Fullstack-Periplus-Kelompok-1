@@ -42,11 +42,81 @@ export default (sequelize) => {
 				allowNull: false,
 				type: DataTypes.STRING,
 			},
-			// isActive: {
-			// 	allowNull: false,
-			// 	type: DataTypes.BOOLEAN,
-			// 	defaultValue: true,
-			// },
+			dimension: {
+				type: DataTypes.STRING,
+			},
+			shippingWeight: {
+				type: DataTypes.DECIMAL(10, 2),
+				defaultValue: 0,
+			},
+			pages: {
+				type: DataTypes.INTEGER,
+				defaultValue: 0,
+			},
+			language: {
+				type: DataTypes.STRING,
+				defaultValue: 'English',
+			},
+			gradeLevel: {
+				allowNull: false,
+				type: DataTypes.STRING,
+				defaultValue: 'NA - NA',
+			},
+			isbn: {
+				type: DataTypes.BIGINT,
+			},
+			publisher: {
+				type: DataTypes.STRING,
+			},
+			publicationDate: {
+				type: DataTypes.DATE,
+			},
+			ageRange: {
+				allowNull: false,
+				type: DataTypes.STRING,
+				defaultValue: 'NA - NA',
+			},
+			isActive: {
+				allowNull: false,
+				type: DataTypes.BOOLEAN,
+				defaultValue: true,
+			},
+			tags: {
+				allowNull: false,
+				type: DataTypes.STRING,
+				defaultValue: '',
+			},
+			coverType: {
+				type: DataTypes.STRING,
+			},
+			author1: {
+				type: DataTypes.STRING,
+			},
+			author2: {
+				type: DataTypes.STRING,
+			},
+			author3: {
+				type: DataTypes.STRING,
+			},
+			editor: {
+				type: DataTypes.STRING,
+			},
+			translator: {
+				type: DataTypes.STRING,
+			},
+			illustrator: {
+				type: DataTypes.STRING,
+			},
+			fastDelivery: {
+				allowNull: false,
+				type: DataTypes.BOOLEAN,
+				defaultValue: false,
+			},
+			discount: {
+				allowNull: false,
+				type: DataTypes.DECIMAL(3, 2),
+				defaultValue: 0,
+			},
 		},
 		{
 			timestamps: true,
