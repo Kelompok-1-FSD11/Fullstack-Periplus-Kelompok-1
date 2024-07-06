@@ -5,7 +5,7 @@ import userRoute from './routes/userRoute.js';
 import adminRoute from './routes/adminRoute.js';
 import importModels from './models/index.js';
 import errorHandler from './middlewares/errorHandler.js';
-import cors from "cors";
+import cors from 'cors';
 
 dotenv.config();
 
