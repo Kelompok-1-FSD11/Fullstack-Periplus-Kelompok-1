@@ -35,6 +35,26 @@ const addProduct = async (req, res, next) => {
 			category_id,
 			qty_sold,
 			image_path,
+			dimension,
+			shippingWeight,
+			pages,
+			language,
+			gradeLevel,
+			isbn,
+			publisher,
+			publicationDate,
+			ageRange,
+			isActive,
+			tags,
+			coverType,
+			author1,
+			author2,
+			author3,
+			editor,
+			translator,
+			illustrator,
+			fastDelivery,
+			discount,
 		} = req.body;
 
 		const addProducts = await Product.create({
@@ -45,6 +65,26 @@ const addProduct = async (req, res, next) => {
 			category_id,
 			qty_sold,
 			image_path,
+			dimension,
+			shippingWeight,
+			pages,
+			language,
+			gradeLevel,
+			isbn,
+			publisher,
+			publicationDate,
+			ageRange,
+			isActive,
+			tags,
+			coverType,
+			author1,
+			author2,
+			author3,
+			editor,
+			translator,
+			illustrator,
+			fastDelivery,
+			discount,
 		});
 		res.status(201).json({
 			message: 'Product added successfully',
@@ -60,11 +100,12 @@ const addCategory = async (req, res, next) => {
 	try {
 		const db = await dbPromise;
 		const Category = db.Category;
-		const { category_name, description } = req.body;
+		const { category_name, description, isActive } = req.body;
 
 		const addCategories = await Category.create({
 			category_name,
 			description,
+			isActive,
 		});
 		res.status(201).json({
 			message: 'Category added succesfully',
@@ -118,20 +159,21 @@ const updateProduct = async (req, res, next) => {
 			image_path,
 		} = req.body;
 
-	
-		const [updated] = await Product.update({
-			product_name,
-			product_description,
-			price,
-			qty_stock,
-			category_id,
-			qty_sold,
-			image_path,
-		}, {
-			where: {product_id: productId },
-		});
+		const [updated] = await Product.update(
+			{
+				product_name,
+				product_description,
+				price,
+				qty_stock,
+				category_id,
+				qty_sold,
+				image_path,
+			},
+			{
+				where: { product_id: productId },
+			}
+		);
 
-		
 		if (updated) {
 			const updatedProduct = await Product.findByPk(productId);
 			res.status(200).json({
@@ -147,44 +189,42 @@ const updateProduct = async (req, res, next) => {
 		next(error);
 	}
 };
-	  // Mencari produk berdasarkan nama produk (product_name)
-	const getProductsByName = async (req, res, next) => {
-		try {
+// Mencari produk berdasarkan nama produk (product_name)
+const getProductsByName = async (req, res, next) => {
+	try {
 		const db = await dbPromise;
 		const Product = db.Product;
 		const Category = db.Category;
 		const ProductReview = db.ProductReview;
 		const { productName } = req.params;
-	
-	
+
 		const products = await Product.findAll({
 			where: {
-			product_name: productName,
+				product_name: productName,
 			},
 			include: [
-			{
-				model: Category,
-			},
-			{
-				model: ProductReview,
-			},
+				{
+					model: Category,
+				},
+				{
+					model: ProductReview,
+				},
 			],
 		});
-	
-		
+
 		if (products.length === 0) {
 			return res.status(404).json({
-			message: 'Product not found',
+				message: 'Product not found',
 			});
 		}
-	
+
 		res.json(products);
-		} catch (error) {
+	} catch (error) {
 		next(error);
-		}
-	};
-	
-/////////////////////////
+	}
+};
+
+
 const getProductsByCategoryName = async (req, res, next) => {
 	try {
 		const db = await dbPromise;
@@ -192,7 +232,6 @@ const getProductsByCategoryName = async (req, res, next) => {
 		const Product = db.Product;
 		const { category_name } = req.params;
 
-	
 		const categories = await Category.findAll({
 			where: {
 				category_name: category_name,
@@ -204,17 +243,15 @@ const getProductsByCategoryName = async (req, res, next) => {
 				{
 					model: Product,
 				},
-				],
+			],
 		});
 
-	
 		if (categories.length === 0) {
 			return res.status(404).json({
 				message: 'Category not found',
 			});
 		}
 
-		
 		res.json(categories);
 	} catch (error) {
 		next(error);
@@ -222,102 +259,108 @@ const getProductsByCategoryName = async (req, res, next) => {
 };
 ////////////////////
 const getProductsByMinPrice = async (req, res, next) => {
-    try {
-        const db = await dbPromise;
-        const Product = db.Product;
-        const { minPrice } = req.params;
+	try {
+		const db = await dbPromise;
+		const Product = db.Product;
+		const { minPrice } = req.params;
 
-        const products = await Product.findAll({
-            where: {
-                price: {
-                    [db.Sequelize.Op.gte]: minPrice,
-                },
-            },
-            include: [
-                {
-                    model: Product,
-                },
+		const products = await Product.findAll({
+			where: {
+				price: {
+					[db.Sequelize.Op.gte]: minPrice,
+				},
+			},
+			include: [
+				{
+					model: Product,
+				},
+			],
+		});
 
-            ],
-        });
+		if (products.length === 0) {
+			return res.status(404).json({
+				message: 'No products found above the specified price',
+			});
+		}
 
-        if (products.length === 0) {
-            return res.status(404).json({
-                message: 'No products found above the specified price',
-            });
-        }
-
-        res.json(products);
-    } catch (error) {
-        next(error);
-    }
+		res.json(products);
+	} catch (error) {
+		next(error);
+	}
 };
 ////////////////////
 const getProductsByMaxPrice = async (req, res, next) => {
-    try {
-        const db = await dbPromise;
-        const Product = db.Product;
-        const { maxPrice } = req.params;
+	try {
+		const db = await dbPromise;
+		const Product = db.Product;
+		const { maxPrice } = req.params;
 
-        const products = await Product.findAll({
-            where: {
-                price: {
-                    [db.Sequelize.Op.lte]: maxPrice,
-                },
-            },
-            include: [
-                {
-                    model: Product,
-                },
+		const products = await Product.findAll({
+			where: {
+				price: {
+					[db.Sequelize.Op.lte]: maxPrice,
+				},
+			},
+			include: [
+				{
+					model: Product,
+				},
+			],
+		});
 
-            ],
-        });
+		if (products.length === 0) {
+			return res.status(404).json({
+				message: 'No products found above the specified price',
+			});
+		}
 
-        if (products.length === 0) {
-            return res.status(404).json({
-                message: 'No products found above the specified price',
-            });
-        }
-
-        res.json(products);
-    } catch (error) {
-        next(error);
-    }
+		res.json(products);
+	} catch (error) {
+		next(error);
+	}
 };
 //hapus Category
 const deleteCategory = async (req, res, next) => {
-    try {
-        const db = await dbPromise;
-        const Category = db.Category;
-        const { categoryId } = req.params;
+	try {
+		const db = await dbPromise;
+		const Category = db.Category;
+		const { categoryId } = req.params;
 
-     
-        const category = await Category.findByPk(categoryId);
+		const category = await Category.findByPk(categoryId);
 
-    
-        if (!category) {
-            return res.status(404).json({
-                message: 'Category not found',
-            });
-        }
+		if (!category) {
+			return res.status(404).json({
+				message: 'Category not found',
+			});
+		}
 
-     
-        await Category.destroy({
-            where: {
-                category_id: categoryId,
-            },
-        });
+		await Category.destroy({
+			where: {
+				category_id: categoryId,
+			},
+		});
 
-        res.status(200).json({
-            message: 'Category deleted successfully',
-        });
-    } catch (error) {
-        next(error); // Tangani error dengan middleware error handler
-    }
+		res.status(200).json({
+			message: 'Category deleted successfully',
+		});
+	} catch (error) {
+		next(error); // Tangani error dengan middleware error handler
+	}
 };
 
 //Menghapus product atau membuat statusnya menjadi inactive
 
 //Menghapus user atau membuat statusnya menjadi inactive
 
-export { getAllProducts, addProduct, addCategory, deleteProduct, updateProduct, getProductsByName,getProductsByCategoryName, getProductsByMinPrice, getProductsByMaxPrice, deleteCategory};
+export {
+	getAllProducts,
+	addProduct,
+	addCategory,
+	deleteProduct,
+	updateProduct,
+	getProductsByName,
+	getProductsByCategoryName,
+	getProductsByMinPrice,
+	getProductsByMaxPrice,
+	deleteCategory,
+};
