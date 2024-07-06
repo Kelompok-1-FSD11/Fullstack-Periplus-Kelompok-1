@@ -7,12 +7,14 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
+import useUserStore from '../../../store/useUserStore';
 
 export default function Login() {
 	const [show, setShow] = useState('password');
 	const navigate = useNavigate();
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState('');
+	const setUser = useUserStore((state) => state.setUser);
 
 	const handleShowPassword = () => {
 		if (show === 'password') {
@@ -32,7 +34,8 @@ export default function Login() {
 				email: values.email,
 				password: values.password,
 			});
-
+      // console.log(response.data.user);
+			setUser(response.data.user);
 			localStorage.setItem('token', response.data.token);
 
 			alert('login sukses');
