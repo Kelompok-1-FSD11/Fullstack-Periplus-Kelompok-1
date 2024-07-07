@@ -6,10 +6,8 @@ import Dropdown from './dropdown/dropdown-menu.jsx';
 import {
 	guestDropdownItems,
 	userDropDownItems,
-} from '../../../../../services/api-dropdown';
-import axios from 'axios';
-
-const apiURL = 'http://localhost:5000/api/user/users';
+} from '../../../../../services/listMenuDropdown.js';
+import { fetchUserData } from '../../../../../services/userService.js';
 
 const NavAuth = () => {
 	const [isDropdownVisible, setIsDropdownVisible] = useState(false);
@@ -22,27 +20,23 @@ const NavAuth = () => {
 		(state) => state
 	);
 
-	useEffect(() => {
+	const fetchData = async () => {
 		const token = localStorage.getItem('token');
 		if (token) {
-			axios
-				.get(apiURL, { headers: { Authorization: token } })
-				.then((response) => {
-					// console.log('Response data from API:', response.data); // Periksa respons data dari API
-					login(response.data); // Perbarui state user setelah login berhasil
-					// console.log('User data after login:', response.data); // Log data user setelah login berhasil
-				})
-				.catch((error) => {
-					console.error('Error fetching user data', error);
-					logout(); // Logout user jika terjadi error
-				});
-		}
-		return () => {
-			if (hideTimeout) {
-				clearTimeout(hideTimeout);
+			try {
+				const userData = await fetchUserData(token);
+				// console.log(userData)
+				login(userData); // Login dengan data pengguna yang diambil dari API
+			} catch (error) {
+				console.error('Error fetching user data', error);
+				logout();
 			}
-		};
-	}, [hideTimeout, login, logout]);
+		}
+	};
+
+	useEffect(() => {
+		fetchData();
+	}, []);
 
 	const handleMouseEnter = () => {
 		if (hideTimeout) {
