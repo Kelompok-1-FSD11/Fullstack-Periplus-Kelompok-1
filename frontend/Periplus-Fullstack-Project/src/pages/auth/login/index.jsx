@@ -14,7 +14,7 @@ export default function Login() {
 	const navigate = useNavigate();
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState('');
-	const setUser = useUserStore((state) => state.setUser);
+	const { login } = useUserStore();
 
 	const handleShowPassword = () => {
 		if (show === 'password') {
@@ -34,15 +34,18 @@ export default function Login() {
 				email: values.email,
 				password: values.password,
 			});
-      // console.log(response.data.user);
-			setUser(response.data.user);
+
+			// Perbarui state user menggunakan fungsi login dari useUserStore
+			login(response.data.user); // Perhatikan bahwa user di sini harus ada pada respons dari API
+
+			// Simpan token di localStorage untuk otentikasi selanjutnya
 			localStorage.setItem('token', response.data.token);
 
-			alert('login sukses');
+			alert('Login berhasil');
 			navigate('/');
 		} catch (err) {
-			setError('Invalid email or password');
-			console.error('Login error', err);
+			setError('Email atau password salah');
+			console.error('Error saat login', err);
 		} finally {
 			setLoading(false);
 		}

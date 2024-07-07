@@ -1,24 +1,79 @@
 import { useNavigate } from 'react-router-dom';
 import Button from '../../../base/Button';
 import useUserStore from '../../../../store/useUserStore';
-import './nav-auth.css';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import Dropdown from './dropdown/dropdown-menu.jsx';
+import {
+	guestDropdownItems,
+	userDropDownItems,
+} from '../../../../../services/api-dropdown';
+import axios from 'axios';
+
+const apiURL = 'http://localhost:5000/api/user/users';
 
 const NavAuth = () => {
-	const [show, setShow] = useState(false);
+	const [isDropdownVisible, setIsDropdownVisible] = useState(false);
+	const [hideTimeout, setHideTimeout] = useState(null);
+	const dropdownUser = userDropDownItems;
+	const dropdownGuest = guestDropdownItems;
+	const navigate = useNavigate();
+
+	const { isAuthenticated, user, login, logout } = useUserStore(
+		(state) => state
+	);
+
+	useEffect(() => {
+		const token = localStorage.getItem('token');
+		if (token) {
+			axios
+				.get(apiURL, { headers: { Authorization: token } })
+				.then((response) => {
+					// console.log('Response data from API:', response.data); // Periksa respons data dari API
+					login(response.data); // Perbarui state user setelah login berhasil
+					// console.log('User data after login:', response.data); // Log data user setelah login berhasil
+				})
+				.catch((error) => {
+					console.error('Error fetching user data', error);
+					logout(); // Logout user jika terjadi error
+				});
+		}
+		return () => {
+			if (hideTimeout) {
+				clearTimeout(hideTimeout);
+			}
+		};
+	}, [hideTimeout, login, logout]);
+
 	const handleMouseEnter = () => {
-		console.log('Mouse enter');
-		setShow(true);
-	};
-	const handleMouseLeave = () => {
-		console.log('Mouse Leave');
-		setShow(false);
+		if (hideTimeout) {
+			clearTimeout(hideTimeout);
+			setHideTimeout(null);
+		}
+		setIsDropdownVisible(true);
 	};
 
-	const navigate = useNavigate();
-	const user = useUserStore((state) => state.user);
+	const handleMouseLeave = () => {
+		const timeout = setTimeout(() => {
+			setIsDropdownVisible(false);
+		}, 300);
+		setHideTimeout(timeout);
+	};
+
+	const handleNavigation = (path) => {
+		navigate(path);
+		setIsDropdownVisible(false); // Menutup dropdown setelah navigasi
+	};
+
+	const handleLogout = () => {
+		logout();
+		localStorage.removeItem('token');
+		navigate('/login');
+	};
+
+	// console.log('User state:', user);
+
 	return (
-		<div className='hidden xl:flex gap-x-3 items-center w-100'>
+		<div className='hidden xl:flex gap-x-3 items-center w-100 hover:text-orange-200'>
 			<div>
 				<svg
 					xmlns='http://www.w3.org/2000/svg'
@@ -26,7 +81,7 @@ const NavAuth = () => {
 					viewBox='0 0 24 24'
 					strokeWidth={1.5}
 					stroke='#fff'
-					className='size-6 cursor-pointer'
+					className='size-6 cursor-pointer hover:stroke-orange-200'
 				>
 					<path
 						strokeLinecap='round'
@@ -45,7 +100,7 @@ const NavAuth = () => {
 					viewBox='0 0 24 24'
 					strokeWidth={1.5}
 					stroke='#fff'
-					className='size-6 cursor-pointer'
+					className='size-6 cursor-pointer hover:stroke-orange-200'
 				>
 					<path
 						strokeLinecap='round'
@@ -62,15 +117,14 @@ const NavAuth = () => {
 				</Button>
 			</div>
 			<div
-				className='flex text-white cursor-pointer w-full text-nowrap items-center'
-				onClick={() => navigate('/login')}
-				onMouseEnter={() => handleMouseEnter()}
-				onMouseLeave={() => handleMouseLeave()}
+				className='flex fill-white text-white cursor-pointer w-full text-nowrap items-center hover:fill-orange-200 hover:text-orange-200'
+				// onClick={() => navigate('/login')}
+				onMouseEnter={handleMouseEnter}
+				onMouseLeave={handleMouseLeave}
 			>
 				<svg
 					xmlns='http://www.w3.org/2000/svg'
 					viewBox='0 0 24 24'
-					fill='#fff'
 					className='size-8'
 				>
 					<path
@@ -80,10 +134,19 @@ const NavAuth = () => {
 					/>
 				</svg>
 				<small className='font-semibold'>
-					{user ? `Hi ${user.user_fname}` : 'Sign in'}
+					{isAuthenticated && user
+						? `Hi, ${user.user_fname}`
+						: 'Sign in'}
 				</small>
+				{isDropdownVisible && (
+					<Dropdown
+						items={isAuthenticated ? dropdownUser : dropdownGuest}
+						handleNavigation={handleNavigation}
+						handleLogout={handleLogout}
+						isAuthenticated={isAuthenticated}
+					/>
+				)}
 			</div>
-
 		</div>
 	);
 };

@@ -3,6 +3,20 @@ import importModels from '../models/index.js';
 
 const dbPromise = importModels();
 
+const getUserInformations = async (req, res, next) => {
+	try {
+		const db = await dbPromise;
+		const User = db.User;
+
+		const users = await User.findOne({
+			where: { user_id: req.user.user_id },
+		});
+		res.json(users);
+	} catch (error) {
+		next(error);
+	}
+};
+
 // Mendapatkan data seluruh product setelah melakukan login
 const getAllProducts = async (req, res, next) => {
 	try {
@@ -302,11 +316,9 @@ const createOrder = async (req, res, next) => {
 
 			//Error ketika stock kurang dari yang akan dicheckout
 			if (product.qty_stock < item.quantity) {
-				return res
-					.status(404)
-					.json({
-						message: `Insufficient stock for product ${product.product_name}`,
-					});
+				return res.status(404).json({
+					message: `Insufficient stock for product ${product.product_name}`,
+				});
 			}
 			product.qty_stock -= item.quantity;
 			product.qty_sold += item.quantity;
@@ -487,6 +499,7 @@ const getProductsByMaxPrice = async (req, res, next) => {
 };
 
 export {
+	getUserInformations,
 	getAllProducts,
 	getUserWishlist,
 	getAllUserOrder,
