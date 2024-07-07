@@ -11,15 +11,16 @@ const router = createBrowserRouter([
   { path: "/login", element: <Login /> },
   { path: "/register", element: <Register />},
   { path: "/detail/:name", element: <DetailBooks /> },
-  {
-    element: <Required />,
-    children: [
-      {
-        path: "/mycart",
-        element: <Cart />,
-      },
-    ],
-  },
+  { path: "/mycart", element: <Cart /> },
+  // {
+  //   element: <Required />,
+  //   children: [
+  //     {
+  //       path: "/mycart",
+  //       element: <Cart />,
+  //     },
+  //   ],
+  // },
 ]);
 
 const App = () => {
