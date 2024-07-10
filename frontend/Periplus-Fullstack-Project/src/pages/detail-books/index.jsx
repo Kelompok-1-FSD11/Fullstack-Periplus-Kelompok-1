@@ -1,4 +1,5 @@
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import Footer from "../../components/module/footer";
 import Navbar from "../../components/module/navbar";
 import images from "../../components/image/imageGalery";
@@ -10,6 +11,7 @@ import BookSlider from "../../components/module/detail/book-information/Slider";
 import Container from "../../components/module/container";
 import FooterDetail from "../../components/module/detail/footer-detail";
 import Layout from "../layout";
+import { useParams } from "react-router-dom";
 
 const book = {
   image: images?.dummyBook,
@@ -133,6 +135,10 @@ const icons = [
 ];
 
 export default function DetailBooks() {
+  const { id } = useParams();
+  const [book, setBook] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [product, setProduct] = useState(book);
   const [buyQuantity, setBuyQuantity] = useState(1);
   const [spiritSpeak, setSpiritSpeak] = useState(books);
@@ -151,6 +157,45 @@ export default function DetailBooks() {
       listBooks: besSeller,
     },
   ];
+
+
+  useEffect(() => {
+    const fetchBook = async () => {
+      try {
+        const response = await axios.get(`http://localhost:5000/api/books/${id}`);
+        setBook(response.data);
+        setIcons([
+          { image: images.icon1, title: "icon 1" },
+          { image: images.icon2, title: "icon 2" },
+          { image: images.icon3, title: "icon 3" },
+          { image: images.icon4, title: "icon 4" },
+        ]);
+        setLoading(false);
+      } catch (err) {
+        setError(err.message);
+        setLoading(false);
+      }
+    };
+
+    fetchBook();
+  }, [id]);
+
+  useEffect(() => {
+    // Fetch books for categories (if needed)
+    const fetchBooks = async () => {
+      // Dummy fetching data
+      setSpiritSpeak([bookDummy, bookDummy, bookDummy]);
+      setBestSeller([bookDummy, bookDummy, bookDummy]);
+    };
+
+    fetchBooks();
+  }, []);
+
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error: {error}</p>;
+
+  const descParagraphs = book?.description.split("\n").map((p) => p.trim());
+
   return (
     <Layout>
       <div
