@@ -194,8 +194,6 @@ export default function DetailBooks() {
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error}</p>;
 
-  const descParagraphs = book?.description.split("\n").map((p) => p.trim());
-
   return (
     <Layout>
       <div
