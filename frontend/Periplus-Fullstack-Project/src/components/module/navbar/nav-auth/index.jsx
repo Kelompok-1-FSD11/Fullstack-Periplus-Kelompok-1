@@ -5,14 +5,14 @@ const NavAuth = () => {
   const navigate = useNavigate();
   return (
     <div className="hidden xl:flex gap-x-3 items-center w-100">
-      <div>
+      <div onClick={() => navigate("/wishlist")}>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
           viewBox="0 0 24 24"
           strokeWidth={1.5}
-          stroke="#fff"
-          className="size-6 cursor-pointer"
+          stroke="currentColor"
+          className="w-6 h-6 text-white hover:text-orange-900 cursor-pointer transition duration-400"
         >
           <path
             strokeLinecap="round"
@@ -27,8 +27,8 @@ const NavAuth = () => {
           fill="none"
           viewBox="0 0 24 24"
           strokeWidth={1.5}
-          stroke="#fff"
-          className="size-6 cursor-pointer"
+          stroke="currentColor"
+          className="w-6 h-6 text-white hover:text-orange-500 cursor-pointer transition duration-400"
         >
           <path
             strokeLinecap="round"
