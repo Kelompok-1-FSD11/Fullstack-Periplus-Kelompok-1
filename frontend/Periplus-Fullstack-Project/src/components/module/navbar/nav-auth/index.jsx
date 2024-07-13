@@ -8,8 +8,10 @@ import {
 	userDropDownItems,
 } from '../../../../../services/listMenuDropdown.js';
 import { fetchUserData } from '../../../../../services/userService.js';
+import { getUserCart } from '../../../../../services/userCartService.js';
 
 const NavAuth = () => {
+	const [cartItemCount, setCartItemCount] = useState(0);
 	const [isDropdownVisible, setIsDropdownVisible] = useState(false);
 	const [hideTimeout, setHideTimeout] = useState(null);
 	const dropdownUser = userDropDownItems;
@@ -36,6 +38,19 @@ const NavAuth = () => {
 
 	useEffect(() => {
 		fetchData();
+	}, []);
+
+	useEffect(() => {
+		const fetchCartItemCount = async () => {
+			try {
+				const cartData = await getUserCart();
+				const itemCount = cartData.length;
+				setCartItemCount(itemCount);
+			} catch (error) {
+				console.error('Error fetching user cart data');
+			}
+		};
+		fetchCartItemCount();
 	}, []);
 
 	const handleMouseEnter = () => {
@@ -107,7 +122,7 @@ const NavAuth = () => {
 						'bg-white text-red-500 rounded-full absolute -top-2 -right-3 xl:w-5 xl:h-5 text-xs text-center'
 					}
 				>
-					0
+					{cartItemCount}
 				</Button>
 			</div>
 			<div

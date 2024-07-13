@@ -62,7 +62,7 @@ export default function Login() {
 
 	return (
 		<main className='flex flex-col items-center py-6 gap-y-6 font-poppins'>
-			<img src={images?.logoPeriplusLogin} alt='' />
+			<img src={images?.logoPeriplusLogin} alt='Logo Periplus' />
 			<div className='relative border border-gray-300 rounded w-[24%] px-3 py-5'>
 				<h1 className='font-bold text-orange-400 text-2xl'>
 					Sign In to Your Account
@@ -117,7 +117,7 @@ export default function Login() {
 							{error && <p className='text-red-500'>{error}</p>}
 							<Button
 								type='submit'
-								className='bg-blue-600 text-white w-full py-1 text-center font-semibold rounded mb-3'
+								className='hover:bg-blue-800 bg-blue-600 hover:text-yellow-400 text-white w-full py-1 text-center font-semibold rounded mb-3'
 							>
 								{loading || isSubmitting ? (
 									<Spinner />

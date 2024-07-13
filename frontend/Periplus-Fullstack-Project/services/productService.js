@@ -1,5 +1,5 @@
 import axios from 'axios';
-import axiosInstance from './axiosInstance';
+// import axiosInstance from './axiosInstance';
 
 const apiURL = 'http://localhost:5000/api/user';
 

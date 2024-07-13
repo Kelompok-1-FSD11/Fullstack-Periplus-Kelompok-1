@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import Button from '../../../base/Button';
 import images from '../../../image/imageGalery';
 import { addToCart } from '../../../../../services/cartService';
