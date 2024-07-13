@@ -166,7 +166,7 @@ export default function Register() {
 
 							<Button
 								type='submit'
-								className='bg-blue-600 text-white w-full py-1 text-center font-semibold rounded mb-3'
+								className='hover:bg-blue-800 bg-blue-600 hover:text-yellow-400 text-white w-full py-1 text-center font-semibold rounded mb-3'
 								disabled={isSubmitting}
 							>
 								{isSubmitting ? <Spinner /> : 'Register'}

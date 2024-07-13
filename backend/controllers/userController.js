@@ -3,6 +3,20 @@ import importModels from '../models/index.js';
 
 const dbPromise = importModels();
 
+const getUserInformations = async (req, res, next) => {
+	try {
+		const db = await dbPromise;
+		const User = db.User;
+
+		const users = await User.findOne({
+			where: { user_id: req.user.user_id },
+		});
+		res.json(users);
+	} catch (error) {
+		next(error);
+	}
+};
+
 // Mendapatkan data seluruh product setelah melakukan login
 const getAllProducts = async (req, res, next) => {
 	try {
@@ -185,6 +199,10 @@ const addToCart = async (req, res, next) => {
 			where: { product_id: product_id },
 		});
 
+		if (!product) {
+			return res.status(404).json({ error: 'Product not found' });
+		}
+
 		if (product.qty_stock < quantity) {
 			return res.status(404).json({
 				error: `You can only add ${product.qty_stock} pcs to your cart`,
@@ -200,19 +218,28 @@ const addToCart = async (req, res, next) => {
 
 		if (userCart) {
 			userCart.quantity += quantity;
+			if (product.qty_stock < userCart.quantity) {
+				return res.status(404).json({
+					error: `You can only add ${product.qty_stock} pcs to your cart`,
+				});
+			}
+
 			await userCart.save();
+			return res.json({
+				message: 'Product quantity updated in cart',
+				cartItem: userCart,
+			});
+		} else {
+			const newCartItem = await Cart.create({
+				user_id: userId,
+				product_id,
+				quantity,
+			});
+			res.json({
+				message: 'The product was successfully added to your cart',
+				newCartItem,
+			});
 		}
-
-		const addToCarts = await Cart.create({
-			user_id: userId,
-			product_id,
-			quantity,
-		});
-
-		res.json({
-			message: 'The product was successfully added to your cart',
-			addToCarts,
-		});
 	} catch (error) {
 		next(error);
 	}
@@ -302,11 +329,9 @@ const createOrder = async (req, res, next) => {
 
 			//Error ketika stock kurang dari yang akan dicheckout
 			if (product.qty_stock < item.quantity) {
-				return res
-					.status(404)
-					.json({
-						message: `Insufficient stock for product ${product.product_name}`,
-					});
+				return res.status(404).json({
+					message: `Insufficient stock for product ${product.product_name}`,
+				});
 			}
 			product.qty_stock -= item.quantity;
 			product.qty_sold += item.quantity;
@@ -486,7 +511,27 @@ const getProductsByMaxPrice = async (req, res, next) => {
 	}
 };
 
+// Mendapatakan informasi detail product
+const getDetailProduct = async (req, res, next) => {
+	const { product_id } = req.params;
+	try {
+		const db = await dbPromise;
+		const Product = db.Product;
+		const products = await Product.findOne({
+			where: { product_id: product_id },
+		});
+		if (!products) {
+			return res.status(404).json({ message: 'Product not found!' });
+		}
+
+		res.status(200).json(products);
+	} catch (error) {
+		next(error);
+	}
+};
+
 export {
+	getUserInformations,
 	getAllProducts,
 	getUserWishlist,
 	getAllUserOrder,
@@ -502,4 +547,5 @@ export {
 	getProductsByCategoryName,
 	getProductsByMinPrice,
 	getProductsByMaxPrice,
+	getDetailProduct,
 };

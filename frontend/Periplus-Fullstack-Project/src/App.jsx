@@ -10,17 +10,16 @@ const router = createBrowserRouter([
   { path: "/", element: <Home /> },
   { path: "/login", element: <Login /> },
   { path: "/register", element: <Register />},
-  { path: "/detail/:name", element: <DetailBooks /> },
-  { path: "/mycart", element: <Cart /> },
-  // {
-  //   element: <Required />,
-  //   children: [
-  //     {
-  //       path: "/mycart",
-  //       element: <Cart />,
-  //     },
-  //   ],
-  // },
+  { path: "/detail/:product_id", element: <DetailBooks /> },
+  {
+    element: <Required />,
+    children: [
+      {
+        path: "/mycart",
+        element: <Cart />,
+      },
+    ],
+  },
 ]);
 
 const App = () => {

@@ -7,12 +7,14 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
+import useUserStore from '../../../store/useUserStore';
 
 export default function Login() {
 	const [show, setShow] = useState('password');
 	const navigate = useNavigate();
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState('');
+	const { login } = useUserStore();
 
 	const handleShowPassword = () => {
 		if (show === 'password') {
@@ -33,13 +35,17 @@ export default function Login() {
 				password: values.password,
 			});
 
+			// Perbarui state user menggunakan fungsi login dari useUserStore
+			login(response.data.user); // Perhatikan bahwa user di sini harus ada pada respons dari API
+
+			// Simpan token di localStorage untuk otentikasi selanjutnya
 			localStorage.setItem('token', response.data.token);
 
-			alert('login sukses');
+			alert('Login berhasil');
 			navigate('/');
 		} catch (err) {
-			setError('Invalid email or password');
-			console.error('Login error', err);
+			setError('Email atau password salah');
+			console.error('Error saat login', err);
 		} finally {
 			setLoading(false);
 		}
@@ -56,7 +62,7 @@ export default function Login() {
 
 	return (
 		<main className='flex flex-col items-center py-6 gap-y-6 font-poppins'>
-			<img src={images?.logoPeriplusLogin} alt='' />
+			<img src={images?.logoPeriplusLogin} alt='Logo Periplus' />
 			<div className='relative border border-gray-300 rounded w-[24%] px-3 py-5'>
 				<h1 className='font-bold text-orange-400 text-2xl'>
 					Sign In to Your Account
@@ -111,7 +117,7 @@ export default function Login() {
 							{error && <p className='text-red-500'>{error}</p>}
 							<Button
 								type='submit'
-								className='bg-blue-600 text-white w-full py-1 text-center font-semibold rounded mb-3'
+								className='hover:bg-blue-800 bg-blue-600 hover:text-yellow-400 text-white w-full py-1 text-center font-semibold rounded mb-3'
 							>
 								{loading || isSubmitting ? (
 									<Spinner />
