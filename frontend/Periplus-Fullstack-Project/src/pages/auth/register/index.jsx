@@ -64,7 +64,7 @@ export default function Register() {
 					onSubmit={onSubmit}
 				>
 					{({ isSubmitting }) => (
-						<Form className='flex flex-col gap-y-4'>
+						<Form className='flex flex-col gap-y-2'>
 							<div className='flex flex-col'>
 								<label htmlFor='email' className='font-bold'>
 									E-mail:
@@ -76,11 +76,13 @@ export default function Register() {
 									name='email'
 									className='border border-gray-300 rounded mt-1 w-full'
 								/>
-								<ErrorMessage
-									name='email'
-									component='p'
-									className='text-red-500'
-								/>
+								<div className='h-6'>
+									<ErrorMessage
+										name='email'
+										component='p'
+										className='text-red-500'
+									/>
+								</div>
 							</div>
 
 							<div className='flex flex-col'>
@@ -97,11 +99,13 @@ export default function Register() {
 									name='user_fname'
 									className='border border-gray-300 rounded mt-1 w-full'
 								/>
-								<ErrorMessage
-									name='user_fname'
-									component='p'
-									className='text-red-500'
-								/>
+								<div className='h-6'>
+									<ErrorMessage
+										name='user_fname'
+										component='p'
+										className='text-red-500'
+									/>
+								</div>
 							</div>
 
 							<div className='flex flex-col'>
@@ -118,11 +122,13 @@ export default function Register() {
 									name='user_lname'
 									className='border border-gray-300 rounded mt-1 w-full'
 								/>
-								<ErrorMessage
-									name='user_lname'
-									component='p'
-									className='text-red-500'
-								/>
+								<div className='h-6'>
+									<ErrorMessage
+										name='user_lname'
+										component='p'
+										className='text-red-500'
+									/>
+								</div>
 							</div>
 
 							<div className='flex flex-col'>
@@ -136,11 +142,13 @@ export default function Register() {
 									name='password'
 									className='border border-gray-300 rounded mt-1 w-full'
 								/>
-								<ErrorMessage
-									name='password'
-									component='p'
-									className='text-red-500'
-								/>
+								<div className='h-6'>
+									<ErrorMessage
+										name='password'
+										component='p'
+										className='text-red-500'
+									/>
+								</div>
 							</div>
 
 							<div className='flex flex-col'>
@@ -157,11 +165,13 @@ export default function Register() {
 									name='confirm_password'
 									className='border border-gray-300 rounded mt-1 w-full'
 								/>
-								<ErrorMessage
-									name='confirm_password'
-									component='p'
-									className='text-red-500'
-								/>
+								<div className='h-6'>
+									<ErrorMessage
+										name='confirm_password'
+										component='p'
+										className='text-red-500'
+									/>
+								</div>
 							</div>
 
 							<Button

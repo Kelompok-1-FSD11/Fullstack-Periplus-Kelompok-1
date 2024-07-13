@@ -73,7 +73,7 @@ export default function Login() {
 					onSubmit={handleLogin}
 				>
 					{({ isSubmitting }) => (
-						<Form className='flex flex-col gap-y-4'>
+						<Form className='flex flex-col gap-y-2'>
 							<div className='flex flex-col'>
 								<label htmlFor='email' className='font-bold'>
 									E-mail:
@@ -85,11 +85,13 @@ export default function Login() {
 									id='email'
 									className='border border-gray-300 rounded mt-1 w-full'
 								/>
-								<ErrorMessage
-									name='email'
-									component='div'
-									className='text-red-500'
-								/>
+								<div className='h-6'>
+									<ErrorMessage
+										name='email'
+										component='div'
+										className='text-red-500 h-8'
+									/>
+								</div>
 							</div>
 							<div className='flex flex-col'>
 								<label htmlFor='password' className='font-bold'>
@@ -102,14 +104,16 @@ export default function Login() {
 									id='password'
 									className='border border-gray-300 rounded mt-1 w-full'
 								/>
-								<ErrorMessage
-									name='password'
-									component='div'
-									className='text-red-500'
-								/>
+								<div className='h-6'>
+									<ErrorMessage
+										name='password'
+										component='div'
+										className='text-red-500'
+									/>
+								</div>
 							</div>
 							<span
-								className='absolute right-6 bottom-1/2 text-sm cursor-pointer'
+								className='absolute right-6 bottom-[52%] text-sm cursor-pointer'
 								onClick={handleShowPassword}
 							>
 								Show
