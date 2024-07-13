@@ -1,5 +1,5 @@
 import { useState } from "react";
-import images from "../../components/image/imageGalery"; // Assuming you have imported your images correctly
+import images from "../../components/image/imageGalery"; 
 import Footer from "../../components/module/footer";
 import Navbar from "../../components/module/navbar";
 import Sidebar from "./sidebar";
@@ -16,7 +16,7 @@ export default function Cart() {
       rating: 4,
       addedDate: "12 Jul 2024",
       shared: false,
-      image: images?.dummyBook, // Update with actual image path
+      image: images?.dummyBook, 
     },
     {
       id: 2,
@@ -27,7 +27,7 @@ export default function Cart() {
       rating: 0,
       addedDate: "11 Jul 2024",
       shared: false,
-      image: images?.dummyBook, // Update with actual image path
+      image: images?.dummyBook, 
     },
   ]);
 
@@ -105,10 +105,10 @@ export default function Cart() {
                       />
                     </div>
                     <div className="flex mt-2">
-                      <button className="bg-blue-500 text-white p-2 rounded mr-2">
+                      <button className="bg-white text-black p-2 rounded mr-2">
                         EDIT
                       </button>
-                      <button className="bg-red-500 text-white p-2 rounded">
+                      <button className="bg-black text-white p-2 rounded">
                         DELETE
                       </button>
                     </div>
