@@ -17,4 +17,26 @@ const addToWishlist = async (productId) => {
 	}
 };
 
-export { addToWishlist };
+const getUserWishlist = async () => {
+	try {
+		const response = await axiosInstance.get(`${apiURL}/wishlists`);
+		return response.data;
+	} catch (error) {
+		console.error('Error fetching user wishlist data', error);
+		throw error;
+	}
+};
+
+const removeUserWishlist = async (wishlistId) => {
+	try {
+		const response = await axiosInstance.delete(
+			`${apiURL}/products-wishlists/${wishlistId}`
+		);
+		return response.data;
+	} catch (error) {
+		console.error('Error deleting product from wishlist.', error);
+		throw error;
+	}
+};
+
+export { addToWishlist, getUserWishlist, removeUserWishlist };

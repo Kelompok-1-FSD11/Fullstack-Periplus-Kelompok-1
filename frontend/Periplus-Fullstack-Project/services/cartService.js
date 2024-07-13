@@ -40,7 +40,7 @@ const updateUserCart = async (productId, buyQuantity) => {
 
 const removeUserCart = async (cartId) => {
 	try {
-		console.log(cartId);
+		// console.log(cartId);
 		const response = await axiosInstance.delete(
 			`${apiURL}/products-carts/${cartId}`
 		);

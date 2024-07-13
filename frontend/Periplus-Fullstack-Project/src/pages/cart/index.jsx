@@ -27,7 +27,7 @@ export default function Cart() {
 	}, []);
 
 	const handleRemove = (cartId) => {
-		console.log(cartId);
+		// console.log(cartId);
 		removeUserCart(cartId);
 		setCartItems(cartItems.filter((item) => item.cart_id !== cartId));
 	};

@@ -165,10 +165,10 @@ const removeFromWishlist = async (req, res, next) => {
 	try {
 		const db = await dbPromise;
 		const Wishlist = db.Wishlist;
-		const { product_id } = req.body;
+		const { wishlist_id } = req.params;
 
 		const userWishlist = await Wishlist.findOne({
-			where: { user_id: req.user.user_id, product_id: product_id },
+			where: { wishlist_id: wishlist_id },
 		});
 		if (!userWishlist) {
 			return res

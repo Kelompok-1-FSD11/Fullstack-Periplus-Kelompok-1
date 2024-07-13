@@ -83,7 +83,7 @@ const NavAuth = () => {
 
 	return (
 		<div className='hidden xl:flex gap-x-3 items-center w-100 hover:text-orange-200'>
-			<div>
+			<div onClick={() => navigate('/wishlist')}>
 				<svg
 					xmlns='http://www.w3.org/2000/svg'
 					fill='none'

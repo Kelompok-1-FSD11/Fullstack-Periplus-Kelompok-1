@@ -26,7 +26,11 @@ const router = express.Router();
 router.get('/products', getAllProducts);
 router.get('/wishlists', authorize('user'), getUserWishlist);
 router.post('/products-wishlists', authorize('user'), addToWishlist);
-router.delete('/products-wishlists', authorize('user'), removeFromWishlist);
+router.delete(
+	'/products-wishlists/:wishlist_id',
+	authorize('user'),
+	removeFromWishlist
+);
 router.get('/carts', authorize('user'), getUserCart);
 router.post('/products-carts', authorize('user'), addToCart);
 router.put('/products-carts', authorize('user'), updateCart);
