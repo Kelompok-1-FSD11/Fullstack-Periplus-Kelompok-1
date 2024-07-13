@@ -7,12 +7,14 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
+import useUserStore from '../../../store/useUserStore';
 
 export default function Login() {
 	const [show, setShow] = useState('password');
 	const navigate = useNavigate();
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState('');
+	const { login } = useUserStore();
 
 	const handleShowPassword = () => {
 		if (show === 'password') {
@@ -33,13 +35,17 @@ export default function Login() {
 				password: values.password,
 			});
 
+			// Perbarui state user menggunakan fungsi login dari useUserStore
+			login(response.data.user); // Perhatikan bahwa user di sini harus ada pada respons dari API
+
+			// Simpan token di localStorage untuk otentikasi selanjutnya
 			localStorage.setItem('token', response.data.token);
 
-			alert('login sukses');
+			alert('Login berhasil');
 			navigate('/');
 		} catch (err) {
-			setError('Invalid email or password');
-			console.error('Login error', err);
+			setError('Email atau password salah');
+			console.error('Error saat login', err);
 		} finally {
 			setLoading(false);
 		}
@@ -56,7 +62,7 @@ export default function Login() {
 
 	return (
 		<main className='flex flex-col items-center py-6 gap-y-6 font-poppins'>
-			<img src={images?.logoPeriplusLogin} alt='' />
+			<img src={images?.logoPeriplusLogin} alt='Logo Periplus' />
 			<div className='relative border border-gray-300 rounded w-[24%] px-3 py-5'>
 				<h1 className='font-bold text-orange-400 text-2xl'>
 					Sign In to Your Account
@@ -67,7 +73,7 @@ export default function Login() {
 					onSubmit={handleLogin}
 				>
 					{({ isSubmitting }) => (
-						<Form className='flex flex-col gap-y-4'>
+						<Form className='flex flex-col gap-y-2'>
 							<div className='flex flex-col'>
 								<label htmlFor='email' className='font-bold'>
 									E-mail:
@@ -79,11 +85,13 @@ export default function Login() {
 									id='email'
 									className='border border-gray-300 rounded mt-1 w-full'
 								/>
-								<ErrorMessage
-									name='email'
-									component='div'
-									className='text-red-500'
-								/>
+								<div className='h-6'>
+									<ErrorMessage
+										name='email'
+										component='div'
+										className='text-red-500 h-8'
+									/>
+								</div>
 							</div>
 							<div className='flex flex-col'>
 								<label htmlFor='password' className='font-bold'>
@@ -96,14 +104,16 @@ export default function Login() {
 									id='password'
 									className='border border-gray-300 rounded mt-1 w-full'
 								/>
-								<ErrorMessage
-									name='password'
-									component='div'
-									className='text-red-500'
-								/>
+								<div className='h-6'>
+									<ErrorMessage
+										name='password'
+										component='div'
+										className='text-red-500'
+									/>
+								</div>
 							</div>
 							<span
-								className='absolute right-6 bottom-1/2 text-sm cursor-pointer'
+								className='absolute right-6 bottom-[52%] text-sm cursor-pointer'
 								onClick={handleShowPassword}
 							>
 								Show
@@ -111,7 +121,7 @@ export default function Login() {
 							{error && <p className='text-red-500'>{error}</p>}
 							<Button
 								type='submit'
-								className='bg-blue-600 text-white w-full py-1 text-center font-semibold rounded mb-3'
+								className='hover:bg-blue-800 bg-blue-600 hover:text-yellow-400 text-white w-full py-1 text-center font-semibold rounded mb-3'
 							>
 								{loading || isSubmitting ? (
 									<Spinner />
