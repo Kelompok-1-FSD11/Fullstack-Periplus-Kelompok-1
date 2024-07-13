@@ -246,7 +246,7 @@ const addToCart = async (req, res, next) => {
 };
 
 // Merubah quantity tiap produk yang ada di User Cart & menghapus produk yang memiliki quantity 0
-const removeFromCart = async (req, res, next) => {
+const updateCart = async (req, res, next) => {
 	try {
 		const db = await dbPromise;
 		const Cart = db.Cart;
@@ -259,15 +259,42 @@ const removeFromCart = async (req, res, next) => {
 			},
 		});
 
-		userCart.quantity = quantity;
-
-		await userCart.save();
+		if (!userCart) {
+			return res.status(404).json({ message: 'Item not found in cart' });
+		}
 
 		if (userCart.quantity === 0) {
 			await userCart.destroy();
+			return res.json({ message: 'Item removed from cart successfully' });
 		}
+		userCart.quantity = quantity;
+		await userCart.save();
 
 		res.json({ message: 'Your cart was successfully updated' });
+	} catch (error) {
+		next(error);
+	}
+};
+
+//Menghapus product dari cart
+const removeFromCart = async (req, res, next) => {
+	try {
+		const db = await dbPromise;
+		const Cart = db.Cart;
+		const { cart_id } = req.params;
+
+		const userCart = await Cart.findOne({
+			where: {
+				cart_id: cart_id,
+			},
+		});
+
+		if (!userCart) {
+			return res.status(404).json({ message: 'Item not found in cart' });
+		}
+		await userCart.destroy();
+
+		res.json({ message: 'Item deleted successfully' });
 	} catch (error) {
 		next(error);
 	}
@@ -540,7 +567,7 @@ export {
 	addToWishlist,
 	addToCart,
 	removeFromWishlist,
-	removeFromCart,
+	updateCart,
 	createOrder,
 	addReview,
 	getProductsByName,
@@ -548,4 +575,5 @@ export {
 	getProductsByMinPrice,
 	getProductsByMaxPrice,
 	getDetailProduct,
+	removeFromCart,
 };

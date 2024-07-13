@@ -8,7 +8,7 @@ import {
 	userDropDownItems,
 } from '../../../../../services/listMenuDropdown.js';
 import { fetchUserData } from '../../../../../services/userService.js';
-import { getUserCart } from '../../../../../services/userCartService.js';
+import { getUserCart } from '../../../../../services/cartService.js';
 
 const NavAuth = () => {
 	const [cartItemCount, setCartItemCount] = useState(0);

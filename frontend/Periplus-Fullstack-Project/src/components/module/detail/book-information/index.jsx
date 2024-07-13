@@ -82,6 +82,7 @@ const BookInformation = ({ product, point, buyQuantity, setBuyQuantity }) => {
 							<div className='flex items-end gap-x-1'>
 								<p className='text-main-red font-medium text-lg'>
 									{formatIDR(product.price)}
+									{console.log(typeof product.price)}
 								</p>
 								{product?.discount > 0 && (
 									<p className='text-sm line-through'>
