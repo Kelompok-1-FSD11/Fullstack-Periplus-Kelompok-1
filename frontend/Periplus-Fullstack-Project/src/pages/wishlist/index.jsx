@@ -46,9 +46,9 @@ export default function Wishlist() {
 				className='flex justify-center pt-[150px] bg-white p-8 font-poppins'
 				style={{ backgroundImage: `url(${images?.mainBg})` }}
 			>
-				<div className='flex'>
+				<div className='flex xl:w-[70%]'>
 					<Sidebar />
-					<div className='max-w-2xl mx-auto ml-8'>
+					<div className='max-w-2xl mx-auto ml-8 w-3/4'>
 						<div className='bg-white p-4 shadow-md rounded mb-8'>
 							<h1 className='text-2xl font-bold mb-4'>
 								My Wish List
