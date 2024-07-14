@@ -10,7 +10,7 @@ const __dirname = join(__filename, '../');
 const basename = _basename(__filename);
 const env = process.env.NODE_ENV || 'development';
 const dbConfig = config[env];
-dbConfig.logging = false
+dbConfig.logging = false;
 const db = {};
 
 const sequelize = new Sequelize(

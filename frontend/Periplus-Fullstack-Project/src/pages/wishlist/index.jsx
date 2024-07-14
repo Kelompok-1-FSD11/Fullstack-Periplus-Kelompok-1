@@ -23,7 +23,7 @@ export default function Wishlist() {
 		const fetchWishlistItem = async () => {
 			try {
 				const userWishlistData = await getUserWishlist();
-				console.log(userWishlistData);
+				// console.log(userWishlistData);
 				setWishlistItem(userWishlistData);
 			} catch (error) {
 				console.error('Error fetching user wishlist data', error);
@@ -37,6 +37,7 @@ export default function Wishlist() {
 		setWishlistItem(
 			wishlistItem.filter((item) => item.wishlist_id !== wishlistId)
 		);
+		alert('The Product is successfully removed from your wislist.');
 	};
 
 	return (

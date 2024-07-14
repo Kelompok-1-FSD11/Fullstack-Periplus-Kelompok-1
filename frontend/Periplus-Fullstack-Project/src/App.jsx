@@ -6,6 +6,7 @@ import Wishlist from './pages/wishlist';
 import Cart from './pages/cart';
 import Login from './pages/auth/login';
 import Register from './pages/auth/register';
+import ScrollToTop from './components/module/scrollToTop';
 
 const router = createBrowserRouter([
 	{ path: '/', element: <Home /> },
@@ -28,7 +29,9 @@ const router = createBrowserRouter([
 const App = () => {
 	return (
 		<>
-			<RouterProvider router={router} />
+			<RouterProvider router={router}>
+        <ScrollToTop />
+      </RouterProvider>
 		</>
 	);
 };

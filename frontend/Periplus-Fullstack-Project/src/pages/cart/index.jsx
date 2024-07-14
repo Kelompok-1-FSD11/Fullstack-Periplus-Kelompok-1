@@ -10,10 +10,11 @@ import {
 	updateUserCart,
 } from '../../../services/cartService';
 import { formatIDR } from '../../utils/formatIDR';
+import { Link } from 'react-router-dom';
 
 export default function Cart() {
 	const [cartItems, setCartItems] = useState([]);
-	const navigate = useNavigate()
+	const navigate = useNavigate();
 
 	useEffect(() => {
 		const fetchCartItems = async () => {
@@ -27,17 +28,28 @@ export default function Cart() {
 		fetchCartItems();
 	}, []);
 
-	const handleRemove = (cartId) => {
+	const handleRemove = async (cartId) => {
 		// console.log(cartId);
 		removeUserCart(cartId);
 		setCartItems(cartItems.filter((item) => item.cart_id !== cartId));
+		alert('The product successfully removed from your cart!');
 	};
 
 	const handleQuantityChange = (id, newQuantity) => {
 		// Update quantity for the item
 		setCartItems(
 			cartItems.map((item) =>
-				item.cart_id === id ? { ...item, quantity: newQuantity } : item
+				item.cart_id === id
+					? {
+							...item,
+							quantity:
+								newQuantity > item.Product.qty_stock
+									? item.Product.qty_stock
+									: newQuantity < 1
+									? 1
+									: newQuantity,
+					}
+					: item
 			)
 		);
 	};
@@ -50,6 +62,7 @@ export default function Cart() {
 				})
 			);
 			console.log('Cart update successfully.');
+			alert('Cart update successfully.');
 		} catch (error) {
 			console.error('Error updating cart items.');
 		}
@@ -88,16 +101,20 @@ export default function Cart() {
 								className='flex justify-between h-[220px] items-center bg-white shadow-md p-4 mb-2 xl:max-w-[70%] xl:mx-auto'
 							>
 								<div>
-									<img
-										src={item.Product.image_path}
-										alt={item.Product.product_name}
-										className='w-40 h-40'
-									/>
+									<Link to={`/detail/${item.product_id}`}>
+										<img
+											src={item.Product.image_path}
+											alt={item.Product.product_name}
+											className='w-40 h-40'
+										/>
+									</Link>
 								</div>
 								<div className='flex-col justify-between ml-4 flex-grow'>
-									<p className='font-bold text-lg mb-2'>
-										{item.Product.product_name}
-									</p>
+									<a href={`/detail/${item.product_id}`}>
+										<p className='font-bold text-lg mb-2'>
+											{item.Product.product_name}
+										</p>
+									</a>
 									<div className='text-gray-900 text-sm'>
 										{formatIDR(discountedPrice)} or {point}{' '}
 										Points
@@ -129,6 +146,10 @@ export default function Cart() {
 														item.quantity + 1
 													)
 												}
+												disabled={
+													item.quantity >=
+													item.qty_stock
+												}
 											>
 												+
 											</button>
@@ -150,11 +171,14 @@ export default function Cart() {
 						<div className='flex space-x-4'>
 							<button
 								onClick={handleUpdateCart}
-								className='hover:text-gray-800 px-4 py-2 mt-4 text-sm font-bold'
+								className='hover:text-white hover:bg-blue-400 px-4 py-2 mt-4 text-sm font-bold transition duration-300 ease-in-out'
 							>
 								UPDATE
 							</button>
-							<button onClick={() => navigate('/')} className='bg-gray-700 text-white px-4 py-2 mt-4 hover:bg-orange-400 text-sm font-bold transition duration-300 ease-in-out'>
+							<button
+								onClick={() => navigate('/')}
+								className='bg-gray-700 text-white px-4 py-2 mt-4 hover:bg-orange-400 text-sm font-bold transition duration-300 ease-in-out'
+							>
 								CONTINUE SHOPPING
 							</button>
 						</div>
@@ -182,7 +206,7 @@ export default function Cart() {
 										</span>
 									</div>
 								</div>
-								<button className='w-full bg-gray-700 text-white px-4 py-2 mt-4 hover:bg-orange-400 text-sm transition duration-300 ease-in-out'>
+								<button className='w-full bg-gray-700 text-white font-bold px-4 py-2 mt-4 hover:bg-orange-400 text-sm transition duration-300 ease-in-out'>
 									CHECKOUT
 								</button>
 							</div>

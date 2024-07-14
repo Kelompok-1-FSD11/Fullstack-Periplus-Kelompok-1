@@ -4,14 +4,14 @@ import images from '../../../image/imageGalery';
 import { addToCart } from '../../../../../services/cartService';
 import { addToWishlist } from '../../../../../services/wishlistService';
 
-const BookShipping = ({ product, buyQuantity, setBuyQuantity }) => {
+const BookShipping = ({ product, buyQuantity, setBuyQuantity}) => {
 	const addToCartHandler = async () => {
 		try {
 			const result = await addToCart(product.product_id, buyQuantity);
-			console.log(result);
+			// console.log(result);
 			alert('Product successfully added to your cart!');
 		} catch (error) {
-			console.error(error);
+			// console.error(error);
 			alert('Failed to add product to your cart!');
 		}
 	};
@@ -19,10 +19,10 @@ const BookShipping = ({ product, buyQuantity, setBuyQuantity }) => {
 	const addToWishlistHandler = async () => {
 		try {
 			const result = await addToWishlist(product.product_id);
-			console.log(result);
+			// console.log(result);
 			alert('Product successfully added to your wishlist!');
 		} catch (error) {
-			console.error(error);
+			// console.error(error);
 			alert('Failed to add product to your wishlist!');
 		}
 	};
@@ -73,7 +73,7 @@ const BookShipping = ({ product, buyQuantity, setBuyQuantity }) => {
 									<button
 										className='w-full h-full py-2'
 										// sesuaikan jika quantity nya melebihi product quantity
-										// disabled={buyQuantity <= product quantity}
+										disabled={buyQuantity >= product.qty_stock}
 										onClick={() =>
 											setBuyQuantity(
 												(current) => current + 1

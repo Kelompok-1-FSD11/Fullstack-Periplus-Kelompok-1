@@ -124,7 +124,7 @@ export default (sequelize) => {
 	);
 
 	Product.associate = (models) => {
-		Product.belongsTo(models.Category, { foreignKey: 'product_id' });
+		Product.belongsTo(models.Category, { foreignKey: 'category_id' });
 		Product.hasMany(models.OrderItem, { foreignKey: 'product_id' });
 		Product.hasMany(models.Cart, { foreignKey: 'product_id' });
 		Product.hasMany(models.Wishlist, { foreignKey: 'product_id' });

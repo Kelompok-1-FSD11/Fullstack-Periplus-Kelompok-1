@@ -6,11 +6,13 @@ import BookShipping from '../book-shipping';
 import { format } from 'date-fns';
 import { id } from 'date-fns/locale/id';
 
-const BookInformation = ({ product, point, buyQuantity, setBuyQuantity }) => {
+const BookInformation = ({ product, buyQuantity, setBuyQuantity }) => {
 	const formatDate = (dateString) => {
 		const date = new Date(dateString);
 		return format(date, 'dd MMMM yyyy', { locale: id });
 	};
+
+	
 	return (
 		<div
 			className='xl:px-[15%] xl:pt-[6%] py-0 px-0'
@@ -19,7 +21,7 @@ const BookInformation = ({ product, point, buyQuantity, setBuyQuantity }) => {
 			}}
 		>
 			<div className='flex flex-col xl:flex-row xl:justify-between md:flex-row xl:px-10 pt-5 pb-10 bg-white '>
-				<div className='flex flex-col gap-y-4 relative'>
+				<div className='flex flex-col h-92 gap-y-4 relative'>
 					<img
 						src={product.image_path}
 						alt=''
@@ -34,8 +36,8 @@ const BookInformation = ({ product, point, buyQuantity, setBuyQuantity }) => {
 						</span>
 					)}
 				</div>
-				<div className='flex flex-col px-7 mt-10 gap-y-7 md:mt-0 xl:mt-0 xl:-ml-18'>
-					<h1 className='text-lg xl:text-xl xl:font-semibold xl:border-b xl:border-gray-300 xl:pb-4'>
+				<div className='flex flex-col w-[40%] px-7 mt-10 gap-y-2 md:mt-0 xl:mt-0 xl:-ml-18'>
+					<h1 className='text-lg xl:text-xl xl:font-semibold xl:border-b xl:border-gray-300'>
 						{product.product_name}
 					</h1>
 					<div className='flex flex-col gap-y-2'>
@@ -128,7 +130,14 @@ const BookInformation = ({ product, point, buyQuantity, setBuyQuantity }) => {
 							</small>
 						)}
 						<p className='text-xs text-gray-500 font-bold'>
-							Or <span className='text-orange-400'>{point}</span>{' '}
+							Or{' '}
+							<span className='text-orange-400'>
+								{Math.round(
+									((product.price * (1 - product.discount)) /
+										1000) *
+										2
+								)}
+							</span>{' '}
 							<span className='text-blue-500'>PEC Points</span>
 						</p>
 					</div>

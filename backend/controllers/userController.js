@@ -1,7 +1,36 @@
-import { where } from 'sequelize';
 import importModels from '../models/index.js';
 
 const dbPromise = importModels();
+
+const getAverageProductReview = async (req, res, next) => {
+	const { product_id } = req.params;
+	try {
+		const db = await dbPromise;
+		const sequelize = db.sequelize;
+		const ProductReview = db.ProductReview;
+		const averageReview = await ProductReview.findAll({
+			group: ['product_id'],
+			attributes: [
+				'product_id',
+				[sequelize.fn('AVG', sequelize.col('rating')), 'averageRating'],
+				[
+					db.sequelize.fn('COUNT', db.sequelize.col('rating')),
+					'reviewCount',
+				],
+			],
+			where: { product_id: product_id },
+		});
+		if (averageReview) {
+			res.status(200).json(averageReview);
+		} else {
+			res.status(404).json({
+				message: 'No reviews found for this product',
+			});
+		}
+	} catch (error) {
+		next(error);
+	}
+};
 
 const getUserInformations = async (req, res, next) => {
 	try {
@@ -23,11 +52,15 @@ const getAllProducts = async (req, res, next) => {
 		const db = await dbPromise;
 		const Product = db.Product;
 		const Category = db.Category;
+		const ProductReview = db.ProductReview;
 
 		const products = await Product.findAll({
 			include: [
 				{
 					model: Category,
+				},
+				{
+					model: ProductReview,
 				},
 			],
 		});
@@ -576,4 +609,5 @@ export {
 	getProductsByMaxPrice,
 	getDetailProduct,
 	removeFromCart,
+	getAverageProductReview,
 };

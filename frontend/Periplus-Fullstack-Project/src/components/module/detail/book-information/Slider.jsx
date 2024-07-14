@@ -14,7 +14,7 @@ function PrevArrow({ onClick }) {
 	return (
 		<button
 			onClick={onClick}
-			className='absolute -bottom-14 left-32 xl:left-[46%] md:left-[44%] xl:-translate-x-1/2 ml-2 text-center py-1 px-3 text-white bg-gray-500 hover:bg-gray-800'
+			className='absolute rounded-md -bottom-14 left-32 xl:left-[45%] md:left-[44%] xl:-translate-x-1/2 ml-2 text-center py-1 px-3 text-white bg-gray-500 hover:bg-gray-800 transition duration-300 ease-in-out'
 		>
 			{'<'}
 		</button>
@@ -24,7 +24,7 @@ function NextArrow({ onClick }) {
 	return (
 		<button
 			onClick={onClick}
-			className='absolute -bottom-14 right-28 xl:right-[46%] md:right-[44%] xl:-translate-x-1/2 mr-1 text-center py-1 px-3 text-white bg-gray-500 hover:bg-blue-gray-800'
+			className='absolute rounded-md -bottom-14 right-28 xl:right-[45%] md:right-[44%] xl:-translate-x-1/2 mr-1 text-center py-1 px-3 text-white bg-gray-500 hover:bg-gray-800 transition duration-300 ease-in-out'
 		>
 			{'>'}
 		</button>
@@ -153,7 +153,7 @@ const BookSlider = () => {
 									src={item?.icon}
 								/>
 							</div>
-							<p className='text-center text-black mt-1'>
+							<p className='text-center text-black mt-1 h-12'>
 								{item?.value}
 							</p>
 						</div>
