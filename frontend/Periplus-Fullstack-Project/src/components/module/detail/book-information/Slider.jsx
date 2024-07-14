@@ -135,7 +135,7 @@ const BookSlider = () => {
 				backgroundImage: `url(${images?.mainBg})`,
 			}}
 		>
-			<div className='max-w-screen relative bg-white h-full xl:min-h-[200px]'>
+			<div className='max-w-screen relative bg-white h-full xl:min-h-[230px]'>
 				<Slider {...settings}>
 					{productDetails.map((item, idx) => (
 						<div

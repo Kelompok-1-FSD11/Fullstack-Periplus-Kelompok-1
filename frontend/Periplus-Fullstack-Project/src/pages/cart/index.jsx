@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import images from '../../components/image/imageGalery'; // Assuming you have imported your images correctly
 import Footer from '../../components/module/footer';
 import Navbar from '../../components/module/navbar';
-
+import { useNavigate } from 'react-router-dom';
 import Layout from '../layout';
 import {
 	getUserCart,
@@ -13,6 +13,7 @@ import { formatIDR } from '../../utils/formatIDR';
 
 export default function Cart() {
 	const [cartItems, setCartItems] = useState([]);
+	const navigate = useNavigate()
 
 	useEffect(() => {
 		const fetchCartItems = async () => {
@@ -153,7 +154,7 @@ export default function Cart() {
 							>
 								UPDATE
 							</button>
-							<button className='bg-gray-700 text-white px-4 py-2 mt-4 hover:bg-orange-400 text-sm font-bold transition duration-300 ease-in-out'>
+							<button onClick={() => navigate('/')} className='bg-gray-700 text-white px-4 py-2 mt-4 hover:bg-orange-400 text-sm font-bold transition duration-300 ease-in-out'>
 								CONTINUE SHOPPING
 							</button>
 						</div>

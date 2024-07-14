@@ -53,7 +53,9 @@ export default function Register() {
 
 	return (
 		<main className='flex flex-col items-center py-6 gap-y-6 font-poppins'>
-			<img src={images?.logoPeriplusLogin} alt='' />
+			<a href='/'>
+				<img src={images?.logoPeriplusLogin} alt='Periplus Logo' />
+			</a>
 			<div className='relative border border-gray-300 rounded w-[24%] px-3 py-5'>
 				<h1 className='font-bold text-orange-400 text-2xl'>
 					Account Registration
