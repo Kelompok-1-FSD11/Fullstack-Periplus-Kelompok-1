@@ -23,16 +23,4 @@ const fetchProductDetail = async (product_id) => {
 	}
 };
 
-const fetchProductReview = async (product_id) => {
-	try {
-		const response = await axios.get(
-			`${apiURL}/product-reviews/average/${product_id}`
-		);
-		return response.data;
-	} catch (error) {
-		console.error('Error fetching product review', error);
-		throw error;
-	}
-};
-
-export { fetchProductData, fetchProductDetail, fetchProductReview };
+export { fetchProductData, fetchProductDetail };

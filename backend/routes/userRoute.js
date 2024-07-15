@@ -19,7 +19,6 @@ import {
 	removeFromWishlist,
 	getDetailProduct,
 	removeFromCart,
-	getAverageProductReview,
 } from '../controllers/userController.js';
 
 const router = express.Router();
@@ -48,6 +47,5 @@ router.get('/products/name/:productName', getProductsByName);
 router.get('/products/category/:categoryName', getProductsByCategoryName);
 router.get('/products/minPrice/:minPrice', getProductsByMinPrice);
 router.get('/products/maxPrice/:maxPrice', getProductsByMaxPrice);
-router.get('/product-reviews/average/:product_id', getAverageProductReview);
 
 export default router;

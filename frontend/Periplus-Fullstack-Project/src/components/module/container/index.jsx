@@ -7,12 +7,14 @@ import Button from '../../base/Button';
 import { useEffect, useState } from 'react';
 import PrevArrow from '../../base/prevArrow';
 import NextArrow from '../../base/nextArrow';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useSlideShow } from '../../../hooks/useSlideShow';
 import { fetchProductData } from '../../../../services/productService';
 
 const Container = ({ title, className, landingPage }) => {
 	const navigate = useNavigate();
+	const location = useLocation();
+	const { product_id } = useParams();
 	const [buyNow, setBuyNow] = useState(null);
 	const [products, setProducts] = useState([]);
 	const show = useSlideShow();
@@ -29,6 +31,10 @@ const Container = ({ title, className, landingPage }) => {
 
 		getProducts();
 	}, []);
+
+	useEffect(() => {
+		window.scrollTo(0, 0);
+	}, [location, product_id]);
 
 	const handleHoverBuyNow = (id) => {
 		setBuyNow(id);

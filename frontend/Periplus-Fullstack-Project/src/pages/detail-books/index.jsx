@@ -36,7 +36,7 @@ export default function DetailBooks() {
 			try {
 				// console.log('fetching product with ID', product_id);
 				const data = await fetchProductDetail(product_id);
-				// console.log('fetched product data', data);
+				// console.log(data);
 				setProduct(data);
 			} catch (error) {
 				setError('Error fetching detail product!');

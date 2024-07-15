@@ -2,36 +2,6 @@ import importModels from '../models/index.js';
 
 const dbPromise = importModels();
 
-const getAverageProductReview = async (req, res, next) => {
-	const { product_id } = req.params;
-	try {
-		const db = await dbPromise;
-		const sequelize = db.sequelize;
-		const ProductReview = db.ProductReview;
-		const averageReview = await ProductReview.findAll({
-			group: ['product_id'],
-			attributes: [
-				'product_id',
-				[sequelize.fn('AVG', sequelize.col('rating')), 'averageRating'],
-				[
-					db.sequelize.fn('COUNT', db.sequelize.col('rating')),
-					'reviewCount',
-				],
-			],
-			where: { product_id: product_id },
-		});
-		if (averageReview) {
-			res.status(200).json(averageReview);
-		} else {
-			res.status(404).json({
-				message: 'No reviews found for this product',
-			});
-		}
-	} catch (error) {
-		next(error);
-	}
-};
-
 const getUserInformations = async (req, res, next) => {
 	try {
 		const db = await dbPromise;
@@ -41,6 +11,49 @@ const getUserInformations = async (req, res, next) => {
 			where: { user_id: req.user.user_id },
 		});
 		res.json(users);
+	} catch (error) {
+		next(error);
+	}
+};
+
+// Mendapatakan informasi detail product
+const getDetailProduct = async (req, res, next) => {
+	const { product_id } = req.params;
+	try {
+		const db = await dbPromise;
+		const Product = db.Product;
+		const ProductReview = db.ProductReview;
+		const products = await Product.findOne({
+			where: { product_id: product_id },
+			include: [
+				{
+					model: ProductReview,
+					attributes: [],
+				},
+			],
+			attributes: {
+				include: [
+					[
+						db.sequelize.fn(
+							'ROUND',
+							db.sequelize.fn('AVG', db.sequelize.col('rating')),
+							1
+						),
+						'averageRating',
+					],
+					[
+						db.sequelize.fn('COUNT', db.sequelize.col('rating')),
+						'reviewCount',
+					],
+				],
+			},
+			group: ['Product.product_id']
+		});
+		if (!products) {
+			return res.status(404).json({ message: 'Product not found!' });
+		}
+
+		res.status(200).json(products);
 	} catch (error) {
 		next(error);
 	}
@@ -58,10 +71,33 @@ const getAllProducts = async (req, res, next) => {
 			include: [
 				{
 					model: Category,
+					attributes: ['category_id', 'category_name'],
 				},
 				{
 					model: ProductReview,
+					attributes: [],
 				},
+			],
+			attributes: {
+				include: [
+					[
+						db.sequelize.fn(
+							'ROUND',
+							db.sequelize.fn('AVG', db.sequelize.col('rating')),
+							1
+						),
+						'averageRating',
+					],
+					[
+						db.sequelize.fn('COUNT', db.sequelize.col('rating')),
+						'reviewCount',
+					],
+				],
+			},
+			group: [
+				'Product.product_id',
+				'Category.category_id',
+				'Category.category_name',
 			],
 		});
 		res.json(products);
@@ -571,25 +607,6 @@ const getProductsByMaxPrice = async (req, res, next) => {
 	}
 };
 
-// Mendapatakan informasi detail product
-const getDetailProduct = async (req, res, next) => {
-	const { product_id } = req.params;
-	try {
-		const db = await dbPromise;
-		const Product = db.Product;
-		const products = await Product.findOne({
-			where: { product_id: product_id },
-		});
-		if (!products) {
-			return res.status(404).json({ message: 'Product not found!' });
-		}
-
-		res.status(200).json(products);
-	} catch (error) {
-		next(error);
-	}
-};
-
 export {
 	getUserInformations,
 	getAllProducts,
@@ -609,5 +626,4 @@ export {
 	getProductsByMaxPrice,
 	getDetailProduct,
 	removeFromCart,
-	getAverageProductReview,
 };

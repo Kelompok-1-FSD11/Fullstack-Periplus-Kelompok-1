@@ -1,4 +1,5 @@
 /* eslint-disable react/prop-types */
+import { useEffect, useState } from 'react';
 import { formatIDR } from '../../../../utils/formatIDR';
 import Stars from '../../../base/Stars';
 import images from '../../../image/imageGalery';
@@ -12,7 +13,6 @@ const BookInformation = ({ product, buyQuantity, setBuyQuantity }) => {
 		return format(date, 'dd MMMM yyyy', { locale: id });
 	};
 
-	
 	return (
 		<div
 			className='xl:px-[15%] xl:pt-[6%] py-0 px-0'
@@ -74,8 +74,17 @@ const BookInformation = ({ product, buyQuantity, setBuyQuantity }) => {
 								)}
 							</div>
 							<div className='flex items-center gap-x-1 my-2'>
-								<Stars ratings={3} className={'text-sm'} />
-								<p className='text-xs'>customer reviews</p>
+								<Stars
+									ratings={
+										product.averageRating
+											? product.averageRating
+											: 0
+									}
+									className={'text-sm'}
+								/>
+								<p className='text-xs'>
+									{product.reviewCount} customer reviews
+								</p>
 								<div className='w-0.5 h-3 bg-gray-500'></div>
 								<p className='cursor-pointer text-xs hover:text-orange-400 transition-colors duration-300'>
 									Write a review
@@ -86,7 +95,6 @@ const BookInformation = ({ product, buyQuantity, setBuyQuantity }) => {
 									{formatIDR(
 										product.price * (1 - product.discount)
 									)}
-									{console.log(typeof product.price)}
 								</p>
 								{product?.discount > 0 && (
 									<p className='text-sm line-through'>
