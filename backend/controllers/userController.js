@@ -47,7 +47,7 @@ const getDetailProduct = async (req, res, next) => {
 					],
 				],
 			},
-			group: ['Product.product_id']
+			group: ['Product.product_id'],
 		});
 		if (!products) {
 			return res.status(404).json({ message: 'Product not found!' });
@@ -113,18 +113,55 @@ const getUserWishlist = async (req, res, next) => {
 		const Wishlist = db.Wishlist;
 		const Product = db.Product;
 		const User = db.User;
+		const ProductReview = db.ProductReview;
 
 		const wishlists = await Wishlist.findAll({
 			where: { user_id: req.user.user_id },
 			include: [
 				{
 					model: Product,
+					include: [
+						{
+							model: ProductReview,
+							attributes: [],
+						},
+					],
 				},
 				{
 					model: User,
+					attributes: ['user_id'],
 				},
 			],
+			attributes: [
+				'wishlist_id',
+				'product_id',
+				'updatedAt',
+				[
+					db.sequelize.fn(
+						'ROUND',
+						db.sequelize.fn(
+							'AVG',
+							db.sequelize.col('Product.ProductReviews.rating')
+						),
+						1
+					),
+					'averageRating',
+				],
+				[
+					db.sequelize.fn(
+						'COUNT',
+						db.sequelize.col('Product.ProductReviews.rating')
+					),
+					'reviewCount',
+				],
+			],
+			group: [
+				'Wishlist.wishlist_id',
+				'Product.product_id',
+				'User.user_id',
+			],
 		});
+
 		res.json(wishlists);
 	} catch (error) {
 		next(error);

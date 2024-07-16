@@ -11,6 +11,8 @@ import {
 import { formatIDR } from '../../utils/formatIDR';
 import { format } from 'date-fns';
 import { id } from 'date-fns/locale/id';
+import Stars from '../../components/base/Stars';
+import { Link } from 'react-router-dom';
 
 export default function Wishlist() {
 	const [wishlistItem, setWishlistItem] = useState([]);
@@ -76,44 +78,47 @@ export default function Wishlist() {
 								className='bg-white border rounded-lg p-4 mb-8 shadow-md'
 							>
 								<div className='flex'>
-									<img
-										src={item.Product.image_path}
-										alt={item.product_id}
-										className='w-24 h-32 object-cover mr-4'
-									/>
+									<div>
+										<Link to={`/detail/${item.product_id}`}>
+											<img
+												src={item.Product.image_path}
+												alt={item.product_id}
+												className='w-24 h-32 object-cover mr-4'
+											/>
+										</Link>
+									</div>
 									<div className='flex-1 gap-6'>
-										<h2 className='text-xl font-semibold'>
-											{item.Product.product_name}
-										</h2>
-										<p>{item.Product.coverType}</p>
-										<p>{item.Product.author1}</p>
-										<p className='text-gray-700'>
+										<div>
+											<Link
+												to={`/detail/${item.product_id}`}
+											>
+												<h2 className='text-black text-md font-semibold mb-2'>
+													{item.Product.product_name}
+												</h2>
+											</Link>
+										</div>
+										<p className='italic text-gray-800 text-xs font-semibold my-2'>
+											{item.Product.coverType}
+										</p>
+										<p className='text-blue-500 text-xs my-2'>
+											{item.Product.author1}
+										</p>
+										<p className='text-red-500 text-sm my-2'>
 											{formatIDR(item.Product.price)}
 										</p>
 
-										{/* Rating coming soon */}
-										{/* <div className='flex items-center'>
-											{Array(5)
-												.fill()
-												.map((_, i) => (
-													<svg
-														key={i}
-														className={`w-5 h-5 ${
-															i < item.rating
-																? 'text-yellow-500'
-																: 'text-gray-300'
-														}`}
-														fill='currentColor'
-														viewBox='0 0 20 20'
-														xmlns='http://www.w3.org/2000/svg'
-													>
-														<path d='M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.566 4.823a1 1 0 00.95.69h5.036c.97 0 1.371 1.24.588 1.81l-4.073 2.957a1 1 0 00-.364 1.118l1.566 4.823c.3.921-.755 1.688-1.539 1.118L10 15.417l-4.073 2.957c-.784.57-1.838-.197-1.539-1.118l1.566-4.823a1 1 0 00-.364-1.118L1.518 10.25c-.783-.57-.382-1.81.588-1.81h5.036a1 1 0 00.95-.69l1.566-4.823z' />
-													</svg>
-												))}
-										</div> */}
+										<Stars
+											ratings={
+												item.averageRating
+													? item.averageRating
+													: 0
+											}
+											className={'text-md'}
+										/>
 
-										<p className='text-gray-500'>
-											Added {formatDate(item.updatedAt)}
+										<p className='text-gray-500 text-xs my-2'>
+											Added{' '}
+											{formatDate(item.updatedAt)}
 										</p>
 
 										{/* Sharing coming soon */}
@@ -140,7 +145,7 @@ export default function Wishlist() {
 														item.wishlist_id
 													)
 												}
-												className='bg-black text-white p-2 rounded hover:bg-gray-800 transition duration-300 ease-in-out'
+												className='bg-gray-800 text-white px-4 py-2 hover:bg-orange-500 transition duration-300 ease-in-out'
 											>
 												DELETE
 											</button>
